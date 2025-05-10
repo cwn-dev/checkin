@@ -19,9 +19,11 @@
       .then(response => { return response.json() })
       .then(coordinates => {
         const startingEntry = Math.floor(Math.random() * ((coordinates.length - 1) - 0 + 1) + 0);
-        
+
         const map = L
-          .map('map')
+          .map('map', {
+            preferCanvas: true
+          })
           .setView([
             coordinates[startingEntry].lat,
             coordinates[startingEntry].long
