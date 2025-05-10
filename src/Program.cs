@@ -65,4 +65,4 @@ app.MapGet("/checkins", async (string apiKey) =>
 
 app.Run();
 
-record CheckIn(double Lat, double Long, string Note, string DateTimeUtc);
+record CheckIn(double Lat, double Long, string? Note, string DateTimeUtc);
