@@ -1,0 +1,11 @@
+services:
+  checkin:
+    image: checkin:latest
+    container_name: checkin
+    restart: always
+    environment:
+      - CHECKIN_API_KEY=your_api_key
+    ports:
+      - 8080:8080
+    volumes:
+      - ./src/db.db:/data/db.db
