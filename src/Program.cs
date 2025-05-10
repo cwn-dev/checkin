@@ -3,8 +3,6 @@ using Microsoft.Data.Sqlite;
 var builder = WebApplication.CreateBuilder(args);
 var app = builder.Build();
 
-app.UseStaticFiles();
-
 app.MapPost("/checkin", static async (CheckIn checkIn) => 
 {
     if(checkIn.ApiKey != Environment.GetEnvironmentVariable("CHECKIN_API_KEY"))
@@ -26,7 +24,7 @@ app.MapPost("/checkin", static async (CheckIn checkIn) =>
     cmd.Parameters.AddWithValue("$longitude", checkIn.Long);
     cmd.Parameters.AddWithValue("$latitude", checkIn.Lat);
     cmd.Parameters.AddWithValue("$timestamp", checkIn.DateTimeUtc);
-    
+
     await cmd.ExecuteNonQueryAsync();
 
     return Results.Ok(checkIn);
