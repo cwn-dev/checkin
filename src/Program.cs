@@ -3,6 +3,8 @@ using Microsoft.Data.Sqlite;
 var builder = WebApplication.CreateBuilder(args);
 var app = builder.Build();
 
+app.UseFileServer();
+
 const string SqliteConnectionString = @"Data Source=/data/db.db";
 
 app.MapPost("/checkin", static async (string apiKey, CheckIn checkIn) => 
