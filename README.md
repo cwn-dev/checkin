@@ -74,7 +74,7 @@ docker run \
   -d \
   -p 8080:8080 \
   -v ./checkin_data/db.db:/data/db.db \
-  -e CHECKIN_API_KEY="test" \
+  -e CHECKIN_API_KEY="your_api_key" \
   cwndev/checkin:latest
 ```
 
