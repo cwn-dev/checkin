@@ -1,11 +1,8 @@
 name: Build & Push Multi-Arch Docker Image
 
 on:
-  push:
-    branches:
-      - main
-    tags:
-      - 'v*.*.*'
+  release:
+    types: [published]
 
 jobs:
   build-and-push:
@@ -26,18 +23,17 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-      - name: Extract Docker Image Metadata
+      - name: Extract Docker image metadata
         id: meta
         uses: docker/metadata-action@v4
         with:
-          images: ${{ secrets.DOCKERHUB_USERNAME }}/checkin
+          images: ${{ secrets.DOCKERHUB_USERNAME }}/my-repo
           tags: |
-            type=ref,event=branch,match=main->[latest]
             type=semver,pattern=v*.*.*->[{{version}}],[latest]
           labels: |
             org.opencontainers.image.source=${{ github.repository }}
 
-      - name: Build and Push Docker Image
+      - name: Build and push Docker image
         uses: docker/build-push-action@v4
         with:
           context: .
