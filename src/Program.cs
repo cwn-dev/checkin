@@ -27,7 +27,7 @@ app.MapPost("/checkin", static async (string apiKey, CheckIn checkIn) =>
     cmd.Parameters.AddWithValue("$note", checkIn.Note);
     cmd.Parameters.AddWithValue("$latitude", checkIn.Lat);
     cmd.Parameters.AddWithValue("$longitude", checkIn.Long);
-    cmd.Parameters.AddWithValue("$timestamp", checkIn.DateTimeUtc);
+    cmd.Parameters.AddWithValue("$timestamp", checkIn.DateTime);
 
     await cmd.ExecuteNonQueryAsync();
 
@@ -60,4 +60,4 @@ app.MapGet("/checkins", static async () =>
 
 app.Run();
 
-record CheckIn(double Lat, double Long, string? Note, string DateTimeUtc);
+record CheckIn(double Lat, double Long, string? Note, string DateTime);
