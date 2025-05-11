@@ -27,7 +27,7 @@ jobs:
         id: meta
         uses: docker/metadata-action@v4
         with:
-          images: ${{ secrets.DOCKERHUB_USERNAME }}/my-repo
+          images: ${{ secrets.DOCKERHUB_USERNAME }}/checkin
           tags: |
             type=semver,pattern=v*.*.*->[{{version}}],[latest]
           labels: |
