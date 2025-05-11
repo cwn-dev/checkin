@@ -2,6 +2,7 @@
 
 ![Build Status](https://img.shields.io/github/actions/workflow/status/cwn-dev/checkin/docker-publish.yml?branch=main)
 ![Latest Release](https://img.shields.io/github/v/release/cwn-dev/checkin)
+[![Docker Hub](https://img.shields.io/badge/Docker%20Hub-Check%20in-blue?logo=docker)](https://hub.docker.com/r/cwndev/checkin)
 
 A simple self-hosted check-in app for saving where you have been or favouriting locations.
 
