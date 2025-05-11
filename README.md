@@ -62,7 +62,7 @@ The advantage of using a Shortcut is you can place a shortcut on a home screen, 
 
 ## Database
 
-You can find a blank SQLite database [here](./db_empty.db).
+You can find a blank SQLite database [here](https://github.com/cwn-dev/checkin/raw/refs/heads/main/db_empty.db).
 
 Make sure you copy `db_empty.db` to the right place and update the `docker run` command / Docker Compose config accordingly.
 
