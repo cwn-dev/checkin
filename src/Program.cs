@@ -34,13 +34,8 @@ app.MapPost("/checkin", static async (string apiKey, CheckIn checkIn) =>
     return Results.Ok(checkIn);
 });
 
-app.MapGet("/checkins", async (string apiKey) =>
+app.MapGet("/checkins", static async () =>
 {
-    if(apiKey != Environment.GetEnvironmentVariable("CHECKIN_API_KEY"))
-    {
-        return Results.Unauthorized();
-    }
-
     using var connection = new SqliteConnection(SqliteConnectionString);
     await connection.OpenAsync();
 
