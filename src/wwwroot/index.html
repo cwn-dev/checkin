@@ -45,7 +45,7 @@
               .marker([point.lat, point.long])
               .addTo(map);
 
-            marker.bindPopup(`<strong>${point.dateTimeUtc}</strong><br>${point.note}`);
+            marker.bindPopup(`<strong>${point.dateTime}</strong><br>${point.note}`);
           });
         }
 
