@@ -26,9 +26,18 @@
     fetch('/checkins')
       .then(response => response.json())
       .then(coordinates => {
-        const startingEntry = Math.floor(Math.random() * coordinates.length);
-        let startLat = coordinates[startingEntry].lat;
-        let startLong = coordinates[startingEntry].long;
+        let startLat;
+        let startLong;
+
+        if(coordinates.length > 0) {
+          const startingEntry = Math.floor(Math.random() * coordinates.length);
+          startLat = coordinates[startingEntry].lat;
+          startLong = coordinates[startingEntry].long;
+        } else {
+          // Centre on London if no existing checkins.
+          startLat = 51.51213573156569
+          startLong = -0.1823298235597972
+        }
 
         function init(lat, long) {
           const map = L
