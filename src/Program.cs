@@ -12,7 +12,7 @@ var app = builder.Build();
 
 app.UseFileServer();
 
-const string SqliteConnectionString = @"Data Source=../db_empty.db";
+const string SqliteConnectionString = @"Data Source=/data/db.db";
 
 app.MapPost("/checkin", static async (
     [FromQuery] string apiKey,
