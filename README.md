@@ -21,12 +21,12 @@ A simple self-hosted check-in app for saving where you have been or favouriting 
 * Content-type: `application/json`
 * Body params: 
   
-    | Field       | Type     | Description                                   |
-    | ----------- | -------- | --------------------------------------------- |
-    | `lat`  | `double`  | Latitude in decimal degrees                   |
-    | `long` | `double`  | Longitude in decimal degrees                  |
-    | `dateTime`      | `string` | ISO 8601 timestamp (e.g. `2025-05-11T14:30+01:00`) |
-    | `note`      | `string` | Text content of the note                      |
+    | Field | Type | Description |
+    | ----- | ---- | ------------|
+    | `lat` | `double` | Latitude in decimal degrees |
+    | `long` | `double` | Longitude in decimal degrees |
+    | `dateTime` | `string` | ISO 8601 timestamp (e.g. `2025-05-11T14:30+01:00`) |
+    | `note` | `string` | Text content of the note |
 * Example request:
     ```bash
     curl -X POST http://localhost:8080/checkin?apiKey=your_api_key \
@@ -47,9 +47,7 @@ Once the Docker container is running, go to http://localhost:8080/checkin
 
 ## Check-in in from iOS
 
-Instructions coming soon...
-
-Basically you want to use Shortcuts with the  following actions:
+Use Shortcuts with the following actions:
 
 * Get current location
 * Current Date
@@ -58,7 +56,7 @@ Basically you want to use Shortcuts with the  following actions:
 
 With the above actions, you then have enough data to [send a POST request to the API](#save-a-location), which can be done in the 'Get contents of' advanced options.
 
-The advantage of using a Shortcut is you can place a shortcut on a home screen, or in the action centre.
+Place a shortcut on your home screen or in the action centre!
 
 ## Database
 
@@ -75,7 +73,7 @@ docker run \
   -d \
   -p 8080:8080 \
   -v ./checkin_data/db.db:/data/db.db \
-  -e CHECKIN_API_KEY="your_api_key" \
+  -e Settings__ApiKey="your_api_key" \
   cwndev/checkin:latest
 ```
 
@@ -88,7 +86,7 @@ services:
     container_name: checkin
     restart: always
     environment:
-      - CHECKIN_API_KEY=your_api_key
+      - Settings__ApiKey=your_api_key
     ports:
       - 8080:8080
     volumes:
