@@ -1,7 +1,5 @@
 FROM mcr.microsoft.com/dotnet/sdk:10.0 AS build
 
-ENV CHECKIN_API_KEY=
-
 WORKDIR /app
 
 COPY ./src ./
