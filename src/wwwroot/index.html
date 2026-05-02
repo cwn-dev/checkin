@@ -1,82 +1,86 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
+
 <head>
-  <title>Coordinate Map</title>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-  <link rel="icon" type="image/x-icon" href="favicon.png">
-  <link rel="stylesheet" href="./lib/leaflet/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
-  <style>
-    body {
-      margin: 0;
-      padding: 0;
-    }
-    
-    html, body, #map {
-      height: 100%;
-      width: 100vw;
-    }
-  </style>
+    <title>Coordinate Map</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <link rel="icon" type="image/x-icon" href="favicon.png">
+    <link rel="stylesheet" href="./lib/leaflet/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+        }
+
+        html, body, #map {
+            height: 100%;
+            width: 100vw;
+        }
+    </style>
 </head>
+
 <body>
-  <div id="map"></div>
+    <div id="map"></div>
 
-  <script src="./lib/leaflet/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
-  <script>
-    fetch('/checkins')
-      .then(response => response.json())
-      .then(coordinates => {
-        let startLat;
-        let startLong;
+    <script src="./lib/leaflet/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+    <script>
+        fetch('/checkins')
+            .then(response => response.json())
+            .then(coordinates => {
+                let startLat;
+                let startLong;
 
-        if(coordinates.length > 0) {
-          const startingEntry = Math.floor(Math.random() * coordinates.length);
-          startLat = coordinates[startingEntry].lat;
-          startLong = coordinates[startingEntry].long;
-        } else {
-          // Centre on London if no existing checkins.
-          startLat = 51.51213573156569
-          startLong = -0.1823298235597972
-        }
+                if (coordinates.length > 0) {
+                    // Centre on a random existing checkin.
+                    const startingEntry = Math.floor(Math.random() * coordinates.length);
+                    startLat = coordinates[startingEntry].lat;
+                    startLong = coordinates[startingEntry].long;
+                } else {
+                    // Centre on London if no existing checkins.
+                    startLat = 51.51213573156569
+                    startLong = -0.1823298235597972
+                }
 
-        function init(lat, long) {
-          const map = L
-            .map('map', {
-              preferCanvas: true
+                function init(lat, long) {
+                    const map = L
+                        .map('map', {
+                            preferCanvas: true
+                        })
+                        .setView([lat, long], 3);
+
+                    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png')
+                        .addTo(map);
+
+                    coordinates.forEach(point => {
+                        const marker = L
+                            .marker([point.lat, point.long])
+                            .addTo(map);
+
+                        marker.bindPopup(`<strong>${point.dateTime}</strong><br>${point.note}`);
+                    });
+                }
+
+                if (navigator.geolocation) {
+                    navigator.geolocation.getCurrentPosition(
+                        pos => {
+                            startLat = pos.coords.latitude;
+                            startLong = pos.coords.longitude;
+                            init(startLat, startLong);
+                        },
+                        err => {
+                            console.warn('Geolocation failed or denied, using fallback coordinates.');
+                            init(startLat, startLong);
+                        }
+                    );
+                } else {
+                    init(startLat, startLong);
+                }
             })
-            .setView([lat, long], 3);
-
-          L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png')
-            .addTo(map);
-
-          coordinates.forEach(point => {
-            const marker = L
-              .marker([point.lat, point.long])
-              .addTo(map);
-
-            marker.bindPopup(`<strong>${point.dateTime}</strong><br>${point.note}`);
-          });
-        }
-
-        if (navigator.geolocation) {
-          navigator.geolocation.getCurrentPosition(
-            pos => {
-              startLat = pos.coords.latitude;
-              startLong = pos.coords.longitude;
-              init(startLat, startLong);
-            },
-            err => {
-              console.warn('Geolocation failed or denied, using fallback coordinates.');
-              init(startLat, startLong);
-            }
-          );
-        } else {
-          init(startLat, startLong);
-        }
-      })
-      .catch(error => {
-        console.error('Error fetching data:', error);
-      });
-  </script>
+            .catch(error => {
+                console.error('Error fetching data:', error);
+            });
+    </script>
 </body>
+
 </html>
