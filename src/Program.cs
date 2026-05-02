@@ -1,15 +1,25 @@
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Data.Sqlite;
+using Microsoft.Extensions.Options;
+using TimeZoneConverter;
 
 var builder = WebApplication.CreateBuilder(args);
+
+// Options
+builder.Services.Configure<Settings>(builder.Configuration.GetSection("Settings"));
+
 var app = builder.Build();
 
 app.UseFileServer();
 
-const string SqliteConnectionString = @"Data Source=/data/db.db";
+const string SqliteConnectionString = @"Data Source=/Users/craig/Development/checkin/db_empty.db";
 
-app.MapPost("/checkin", static async (string apiKey, CheckIn checkIn) => 
+app.MapPost("/checkin", static async (
+    [FromQuery] string apiKey,
+    CheckInPost checkIn,
+    IOptions<Settings> settings) => 
 {
-    if(apiKey != Environment.GetEnvironmentVariable("CHECKIN_API_KEY"))
+    if(apiKey != settings.Value.ApiKey)
     {
         return Results.Unauthorized();
     }
@@ -24,10 +34,15 @@ app.MapPost("/checkin", static async (string apiKey, CheckIn checkIn) =>
 
     using var cmd = new SqliteCommand(query, connection);
 
+    // Create the DateTimeOffset
+    var timeZone = TZConvert.GetTimeZoneInfo(checkIn.TimeZone);
+    var offset = timeZone.GetUtcOffset(checkIn.DateTime);
+    var dateTime = new DateTimeOffset(checkIn.DateTime, offset);
+
     cmd.Parameters.AddWithValue("$note", checkIn.Note);
     cmd.Parameters.AddWithValue("$latitude", checkIn.Lat);
     cmd.Parameters.AddWithValue("$longitude", checkIn.Long);
-    cmd.Parameters.AddWithValue("$timestamp", checkIn.DateTime);
+    cmd.Parameters.AddWithValue("$timestamp", dateTime.ToString("yyyy-MM-ddTHH:mm:ss.fffzzz"));
 
     await cmd.ExecuteNonQueryAsync();
 
@@ -60,4 +75,9 @@ app.MapGet("/checkins", static async () =>
 
 app.Run();
 
+class Settings
+{
+    public required string ApiKey { get; set; }
+}
 record CheckIn(double Lat, double Long, string? Note, string DateTime);
+record CheckInPost(double Lat, double Long, string? Note, string TimeZone, DateTime DateTime);
