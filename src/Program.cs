@@ -34,15 +34,23 @@ app.MapPost("/checkin", static async (
 
     using var cmd = new SqliteCommand(query, connection);
 
-    // Create the DateTimeOffset
-    var timeZone = TZConvert.GetTimeZoneInfo(checkIn.TimeZone);
-    var offset = timeZone.GetUtcOffset(checkIn.DateTime);
-    var dateTime = new DateTimeOffset(checkIn.DateTime, offset);
+    DateTimeOffset? dateTimeOffset = null;
+
+    if(!string.IsNullOrWhiteSpace(checkIn.TimeZone))
+    {
+        // Create the DateTimeOffset
+        var timeZone = TZConvert.GetTimeZoneInfo(checkIn.TimeZone);
+        var offset = timeZone.GetUtcOffset(checkIn.DateTime);
+        dateTimeOffset = new DateTimeOffset(checkIn.DateTime, offset);
+    }
+
+    var dateString = (dateTimeOffset ?? checkIn.DateTime)
+        .ToString("yyyy-MM-ddTHH:mm:ss.fffzzz");
 
     cmd.Parameters.AddWithValue("$note", checkIn.Note);
     cmd.Parameters.AddWithValue("$latitude", checkIn.Lat);
     cmd.Parameters.AddWithValue("$longitude", checkIn.Long);
-    cmd.Parameters.AddWithValue("$timestamp", dateTime.ToString("yyyy-MM-ddTHH:mm:ss.fffzzz"));
+    cmd.Parameters.AddWithValue("$timestamp", dateString);
 
     await cmd.ExecuteNonQueryAsync();
 
@@ -80,4 +88,4 @@ class Settings
     public required string ApiKey { get; set; }
 }
 record CheckIn(double Lat, double Long, string? Note, string DateTime);
-record CheckInPost(double Lat, double Long, string? Note, string TimeZone, DateTime DateTime);
+record CheckInPost(double Lat, double Long, string? Note, string? TimeZone, DateTime DateTime);
