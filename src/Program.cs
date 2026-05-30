@@ -74,4 +74,3 @@ class Settings
     public required string ApiKey { get; set; }
 }
 record CheckIn(double Lat, double Long, string? Note, string DateTime);
-record CheckInPost(double Lat, double Long, string? Note, string? TimeZone, string DateTime);

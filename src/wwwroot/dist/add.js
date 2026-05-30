@@ -103,11 +103,6 @@ timeZoneInput.addEventListener("focus", () => {
         cleared = true;
     }
 });
-// timeZoneInput.addEventListener("input", (e) => {
-//     const target = e.target as HTMLInputElement;
-//     const dateTime = getRequiredElementById<HTMLInputElement>("datetime");
-//     getIso8601DateString(target.value, dateTime.value);
-// });
 timezones.forEach(tz => {
     const option = document.createElement("option");
     const offset = getTimeZoneOffset(tz);
