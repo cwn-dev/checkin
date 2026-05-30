@@ -6,12 +6,14 @@
 
 A simple self-hosted check-in app for saving where you have been or favouriting locations.
 
+This project is not vibe-coded (I don't use any AI tools in vscode).  I do use an LLM in the browser in the same way I would have previously used web search / StackOverflow.
+
 ## Features
 
-- ✅ **Simple web API** to save a longitude, latitude, note and date to a database.  
-- ✅ **Map visualisation** see your saved locations plotted on a [leaflet.js](https://leafletjs.com/) map.
-- ✅ **SQLite** for lightweight, simple, file-based storage.  
-- ✅ **Dockerized** for easy deployment.  
+- **Simple web API** to save a longitude, latitude, note and date to a database.  
+- **Map visualisation** see your saved locations plotted on a [leaflet.js](https://leafletjs.com/) map.
+- **SQLite** for lightweight, simple, file-based storage.  
+- **Dockerized** for easy deployment.  
 
 ## Using Check-in
 
@@ -34,10 +36,12 @@ A simple self-hosted check-in app for saving where you have been or favouriting 
         -d '{
             "lat": 50.17479763660827,
             "long": -5.256169543434019,
-            "dateTime": "2025-05-11T14:30:00Z",
+            "dateTime": "2025-05-11T14:30+01:00",
             "note": "Cornwall!"
         }'
     ```
+
+Note that 'dateTime' is a text field in SQLite, so it can be whatever you want. I personally opt for [ISO8601](https://en.wikipedia.org/wiki/ISO_8601) as I feel that has all the info I'd ever need.
 
 ### Visualise Locations on Map
 
@@ -92,3 +96,10 @@ services:
     volumes:
       - ./checkin_data/db.db:/data/db.db
 ```
+
+## Tech Stack
+
+- Plain HTML & CSS.
+- .NET Core 10 Minimal APIs.
+- TypeScript ES2022 (plain JS).
+- SQLite.
