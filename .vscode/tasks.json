@@ -36,6 +36,21 @@
                 "${workspaceFolder}/src/checkin.sln"
             ],
             "problemMatcher": "$msCompile"
+        },
+        {
+            "label": "TS Watch",
+            "type": "shell",
+            "command": "tsc",
+            "args": [
+                "-w",
+                "-p",
+                "${workspaceFolder}/src"
+            ],
+            "isBackground": true,
+            "problemMatcher": [
+                "$tsc-watch"
+            ],
+            "group": "build"
         }
     ]
 }
