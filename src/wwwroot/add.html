@@ -80,10 +80,11 @@
                 <input type="text" id="longitude" name="longitude">
 
                 <label for="datetime">Timestamp</label>
-                <input type="datetime-local" id="datetime" name="datetime">
+                <input type="datetime-local" step="1" id="datetime" name="datetime">
 
-                <label for="timezone">Timezone</label>
-                <select id="timezone" name="timezone"></select>
+                <label for="timezoneInput">Timezone</label>
+                <input id="timezoneInput" name="timezone" list="timezoneList" />
+                <datalist id="timezoneList"></datalist>
 
                 <label for="apikey">API Key</label>
                 <input type="text" id="apiKey" name="apikey">
@@ -100,76 +101,8 @@
     </div>
 
     <script src="./lib/leaflet/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
-    <script>
-        // Centre on London
-        let startLat = 51.51213573156569
-        let startLong = -0.1823298235597972
-
-        const map = L.map('map').setView([startLat, startLong], 13);
-
-        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png')
-            .addTo(map);
-
-        let marker = L.marker([startLat, startLong]).addTo(map);
-
-        function updateMap() {
-            const lat = parseFloat(document.getElementById("latitude").value);
-            const lng = parseFloat(document.getElementById("longitude").value);
-
-            if (!isNaN(lat) && !isNaN(lng)) {
-                const newLatLng = [lat, lng];
-
-                marker.setLatLng(newLatLng);
-                map.setView(newLatLng, 13);
-            }
-        }
-
-        document.getElementById("latitude").addEventListener("input", updateMap);
-        document.getElementById("longitude").addEventListener("input", updateMap);
-
-        document.getElementById("checkinForm").addEventListener("submit", async function (e) {
-            e.preventDefault();
-
-            const apiKey = document.getElementById("apiKey").value;
-
-            const payload = {
-                note: document.getElementById("note").value,
-                long: document.getElementById("longitude").value,
-                lat: document.getElementById("latitude").value,
-                dateTime: document.getElementById("datetime").value,
-                timeZone: document.getElementById("timezone").value,
-            };
-
-            try {
-                const response = await fetch("/checkin?apiKey=" + encodeURIComponent(apiKey), {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json"
-                    },
-                    body: JSON.stringify(payload),
-                });
-
-                const text = await response.text();
-                document.getElementById("result").textContent =
-                    "Status: " + response.status + "\n\n" + text;
-
-            } catch (error) {
-                document.getElementById("result").textContent = error.toString();
-            }
-        });
-
-        const select = document.getElementById("timezone");
-        const timezones = Intl.supportedValuesOf('timeZone');
-
-        timezones.forEach(tz => {
-            const option = document.createElement("option");
-            option.value = tz;
-            option.textContent = tz;
-            select.appendChild(option);
-        });
-
-        select.value = Intl.DateTimeFormat().resolvedOptions().timeZone;
-    </script>
+    <script src="./dist/helpers.js"></script>
+    <script src="./dist/add.js"></script>
 </body>
 
 </html>
