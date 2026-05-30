@@ -15,7 +15,7 @@ const string SqliteConnectionString = @"Data Source=/data/db.db";
 
 app.MapPost("/checkin", static async (
     [FromQuery] string apiKey,
-    CheckInPost checkIn,
+    CheckIn checkIn,
     IOptions<Settings> settings) => 
 {
     if(apiKey != settings.Value.ApiKey)
@@ -73,4 +73,5 @@ class Settings
 {
     public required string ApiKey { get; set; }
 }
+
 record CheckIn(double Lat, double Long, string? Note, string DateTime);
