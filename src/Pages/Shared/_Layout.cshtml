@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Coordinate Map</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <link rel="icon" type="image/x-icon" href="./dist/images/logo.png">
+
+    <link rel="stylesheet" href="./lib/leaflet/leaflet.css" />
+    <link rel="stylesheet" href="./dist/style.css" />
+</head>
+
+<body>
+    <header>
+        <div class="topbar">
+            <div class="topbar-left" hx-get="/map" hx-target="#content" hx-push-url="/" hx-swap="innerHTML">
+                <img class="logo" src="./dist/images/logo.png" alt="logo" />
+                <div class="brand">Coordinate Map</div>
+            </div>
+
+            <nav>
+                <div class="nav-links">
+                    <a href="/" hx-get="/index?handler=map" hx-target="#content" hx-push-url="/" hx-swap="innerHTML">Home</a>
+                    <a href="/list" hx-get="/list" hx-target="#content" hx-push-url="true" hx-swap="innerHTML">List</a>
+
+                    <div class="menu-separator"></div>
+
+                    <a class="github" href="https://github.com/cwn-dev/checkin" target="_blank" rel="noopener">
+                        <img src="./dist/images/github.png" alt="github" title="GitHub" />
+                    </a>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <aside id="sidebar"></aside>
+
+    <main>
+        @RenderBody()
+    </main>
+
+    <!-- External libraries -->
+    <script src="./lib/htmx/htmx.min.js"></script>
+    <script src="./lib/htmx/json-enc.js"></script>
+    <script src="./lib/hyperscript/hyperscript.min.js"></script>
+    <script src="./lib/leaflet/leaflet.js"></script>
+
+    <!-- App -->
+    <script src="./dist/index.js"></script>
+    <script src="./dist/helpers.js"></script>
+</body>
+
+</html>

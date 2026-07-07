@@ -1,0 +1,391 @@
+@font-face {
+    font-family: "Source Sans Pro Light";
+    src: url("./fonts/sourcesanspro-light.ttf") format("truetype");
+}
+
+@font-face {
+    font-family: "Source Sans Pro Regular";
+    src: url("./fonts/sourcesanspro-regular.ttf") format("truetype");
+}
+
+@font-face {
+    font-family: "Source Sans Pro Semi-Bold";
+    src: url("./fonts/sourcesanspro-semibold.ttf") format("truetype");
+}
+
+body {
+    font-family: "Source Sans Pro Regular";
+    margin: 0;
+    padding: 0;
+}
+
+html,
+body {
+    height: 100%;
+    width: 100vw;
+}
+
+/*
+ * Top bar
+ * ---------------------------------------------*/
+.topbar {
+    align-items: center;
+    backdrop-filter: blur(12px);
+    background: rgba(17, 24, 39, 0.6);
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.25);
+    color: white;
+    display: flex;
+    height: 52px;
+    justify-content: space-between;
+    left: 0;
+    padding: 0 14px;
+    position: fixed;
+    right: 0;
+    top: 0;
+    z-index: 1000;
+}
+
+/*
+ * Logo / title
+ * ---------------------------------------------*/
+.topbar-left {
+    align-items: center;
+    cursor: pointer;
+    display: flex;
+    gap: 12px;
+}
+
+.logo {
+    width: 44px;
+}
+
+.brand {
+    font-family: "Source Sans Pro Regular";
+    font-size: 16px;
+}
+
+/*
+ * Navigation
+ * --------------------------------------------*/
+.nav-links {
+    align-items: center;
+    font-family: "Source Sans Pro Light";
+    display: flex;
+    gap: 14px;
+}
+
+.nav-links a {
+    border-radius: 6px;
+    color: white;
+    font-size: 14px;
+    opacity: 0.9;
+    padding: 6px 8px;
+    text-decoration: none;
+}
+
+.nav-links a:hover {
+    background: rgba(255, 255, 255, 0.1);
+    opacity: 1;
+}
+
+.nav-links .menu-separator {
+    border-right: 1px solid white;
+    height: 50px;
+    opacity: 0.3;
+}
+
+.github {
+    display: flex;
+}
+
+.github img {
+    width: 33px;
+}
+
+/*
+ * Map
+ * --------------------------------------------*/
+#map {
+    bottom: 0;
+    height: 100%;
+    position: absolute;
+    width: 100vw;
+}
+
+/* Push the leaflet map controls down */
+.leaflet-top {
+    top: 60px;
+}
+
+.leaflet-container {
+    font-family: "Source Sans Pro Regular";
+}
+
+.leaflet-popup-content {
+    min-width: 170px;
+}
+
+.leaflet-popup-content strong {
+    font-family: "Source Sans Pro Semi-Bold";
+}
+
+#add-btn {
+    align-items: center;
+    background-color: #4CAF50;
+    border-radius: 50%;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    float: right;
+    height: 33px;
+    justify-content: center;
+    position: relative;
+    position: relative;
+    right: 8px;
+    top: 60px;
+    width: 33px;
+    z-index: 1300;
+}
+
+#add-btn:hover {
+    background-color: #45a049;
+}
+
+/* Horizontal bar */
+#add-btn::before,
+#add-btn::after {
+    background-color: white;
+    border-radius: 2px;
+    content: "";
+    position: absolute;
+}
+
+/* Horizontal line */
+#add-btn::before {
+    height: 3px;
+    width: 20px;
+}
+
+/* Vertical line */
+#add-btn::after {
+    height: 20px;
+    width: 3px;
+}
+
+/*
+ * Dialogs
+ *---------------------------------------------*/
+.closing {
+    animation-name: fadeOut;
+    animation-duration: 150ms;
+    animation-timing-function: ease;
+}
+
+.opening {
+    animation-name: fadeIn;
+    animation-duration: 150ms;
+    animation-timing-function: ease;
+}
+
+@keyframes fadeIn {
+    0% {
+        opacity: 0;
+    }
+
+    100% {
+        opacity: 1;
+    }
+}
+
+@keyframes fadeOut {
+    0% {
+        opacity: 1;
+    }
+
+    100% {
+        opacity: 0;
+    }
+}
+
+@keyframes zoomIn {
+    0% {
+        transform: scale(0.9);
+    }
+
+    100% {
+        transform: scale(1);
+    }
+}
+
+@keyframes zoomOut {
+    0% {
+        transform: scale(1);
+    }
+
+    100% {
+        transform: scale(0.9);
+    }
+}
+
+/*
+ * Add checkin sidebar
+ * --------------------------------------------*/
+.add-sidebar {
+    background: rgba(17, 24, 39, 0.7);
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 18px;
+    box-shadow:
+        0 10px 30px rgba(0, 0, 0, 0.35),
+        0 0 0 1px rgba(255, 255, 255, 0.03);
+    left: 55px;
+    max-width: calc(100vw - 32px);
+    overflow-y: auto;
+    padding: 22px;
+    position: fixed;
+    top: 72px;
+    width: 270px;
+    z-index: 1200;
+}
+
+.add-sidebar .left {
+    border-right: 1px solid #ccc;
+    overflow-y: auto;
+    padding: 20px;
+    width: 400px;
+}
+
+.add-sidebar form {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.add-sidebar input,
+.add-sidebar textarea,
+.add-sidebar button,
+.add-sidebar select {
+    font-size: 16px;
+    padding: 8px 0 8px 9px;
+}
+
+.add-sidebar textarea {
+    min-height: 80px;
+    resize: vertical;
+}
+
+.add-sidebar button {
+    cursor: pointer;
+}
+
+.add-sidebar #result {
+    white-space: pre-wrap;
+}
+
+.add-sidebar input,
+.add-sidebar textarea,
+.add-sidebar select {
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 12px;
+    color: white;
+    font-size: 14px;
+    transition:
+        border-color 0.2s ease,
+        background 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+.add-sidebar input:focus,
+.add-sidebar textarea:focus,
+.add-sidebar select:focus {
+    background: rgba(255, 255, 255, 0.1);
+    border-color: #60a5fa;
+    box-shadow: 0 0 0 4px rgba(96, 165, 250, 0.15);
+    outline: none;
+}
+
+.add-sidebar input::placeholder,
+.add-sidebar textarea::placeholder {
+    color: rgba(255, 255, 255, 0.45);
+}
+
+.add-sidebar button {
+    background: linear-gradient(135deg, #2563eb, #1d4ed8);
+    border: none;
+    border-radius: 12px;
+    color: white;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 600;
+    margin-top: 8px;
+    padding: 13px 16px;
+    transition:
+        transform 0.15s ease,
+        box-shadow 0.2s ease;
+}
+
+.add-sidebar button:hover {
+    box-shadow:
+        0 8px 20px rgba(37, 99, 235, 0.35);
+    transform: translateY(-1px);
+}
+
+.add-sidebar button:active {
+    transform: translateY(0);
+}
+
+.add-sidebar .button-row {
+    display: flex;
+    gap: 10px;
+    justify-content: flex-end;
+}
+
+/* Mobile */
+@media (max-width: 768px) {
+    .add-sidebar {
+        right: 46px;
+        width: auto;
+    }
+}
+
+/*
+ * Checkins list
+ *---------------------------------------------*/
+#list {
+    margin: 10px;
+    position: relative;
+    top: 60px;
+}
+
+#list table {
+    background: #fff;
+    border: 1px solid #e5e7eb;
+    border-collapse: collapse;
+    border-radius: 8px;
+    overflow: hidden;
+    width: 100%;
+}
+
+#list th,
+#list td {
+    border-bottom: 1px solid #e5e7eb;
+    font-size: 14px;
+    padding: 12px 16px;
+    text-align: left;
+}
+
+#list th {
+    background: #f3f4f6;
+    color: #374151;
+    font-family: "Source Sans Pro Semi-Bold";
+    font-weight: 100;
+}
+
+#list tr:hover {
+    background: #f9fafb;
+}
+
+#list tr:last-child td {
+    border-bottom: none;
+}

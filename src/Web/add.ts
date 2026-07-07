@@ -1,153 +1,159 @@
-// Centre on London
-let startLat: number = 51.51213573156569;
-let startLong: number = -0.1823298235597972;
+// async function initAdd() {
+//     const form = getRequiredElementById("checkinForm");
 
-const map = L.map('map').setView([startLat, startLong], 3);
+//     if(!form)
+//         return;
 
-L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png")
-    .addTo(map);
+//     // Centre on London
+//     let startLat: number = 51.51213573156569;
+//     let startLong: number = -0.1823298235597972;
 
-const marker = L.marker([startLat, startLong]).addTo(map);
+//     const map = L.map('map').setView([startLat, startLong], 3);
 
-function updateMap() {
-    const latitudeElement = getRequiredElementById<HTMLInputElement>("latitude");
-    const longitudeElement = getRequiredElementById<HTMLInputElement>("longitude");
+//     L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png")
+//         .addTo(map);
 
-    const lat = parseFloat(latitudeElement.value);
-    const lng = parseFloat(longitudeElement.value);
+//     const marker = L.marker([startLat, startLong]).addTo(map);
 
-    if (!isNaN(lat) && !isNaN(lng)) {
-        const newLatLng = [lat, lng];
+//     function updateMap() {
+//         const latitudeElement = getRequiredElementById<HTMLInputElement>("latitude");
+//         const longitudeElement = getRequiredElementById<HTMLInputElement>("longitude");
 
-        marker.setLatLng(newLatLng);
-        map.setView(newLatLng, 13);
-    }
-}
+//         const lat = parseFloat(latitudeElement.value);
+//         const lng = parseFloat(longitudeElement.value);
 
-function getTimeZoneOffset(tz: string): string {
-    const date = new Date();
+//         if (!isNaN(lat) && !isNaN(lng)) {
+//             const newLatLng = [lat, lng];
 
-    const dtParts = Intl.DateTimeFormat(
-        "en-GB",
-        {
-            timeZone: tz,
-            timeZoneName: "longOffset"
-        })
-        .formatToParts(date);
+//             marker.setLatLng(newLatLng);
+//             map.setView(newLatLng, 13);
+//         }
+//     }
 
-    const offsetPart = dtParts
-        .find(x => x.type === "timeZoneName");
+//     function getTimeZoneOffset(tz: string): string {
+//         const date = new Date();
 
-    return offsetPart
-        ? offsetPart.value.replace("GMT", "UTC")
-        : "+00:00";
-}
+//         const dtParts = Intl.DateTimeFormat(
+//             "en-GB",
+//             {
+//                 timeZone: tz,
+//                 timeZoneName: "longOffset"
+//             })
+//             .formatToParts(date);
 
-function getIso8601DateString(tz: string, dateTime: string) : string {
-    try {
-        const offset = getTimeZoneOffset(tz);
-        const offsetVal = offset.replace("UTC", "");
+//         const offsetPart = dtParts
+//             .find(x => x.type === "timeZoneName");
 
-        return `${dateTime}${offsetVal}`;
-    } catch (error) {
-        // Intentionally ignored.
-    }
+//         return offsetPart
+//             ? offsetPart.value.replace("GMT", "UTC")
+//             : "+00:00";
+//     }
 
-    return '';
-}
+//     function getIso8601DateString(tz: string, dateTime: string): string {
+//         try {
+//             const offset = getTimeZoneOffset(tz);
+//             const offsetVal = offset.replace("UTC", "");
 
-interface AddDto {
-    Note: string;
-    Long: number;
-    Lat: number;
-    DateTime: string;
-}
+//             return `${dateTime}${offsetVal}`;
+//         } catch (error) {
+//             // Intentionally ignored.
+//         }
 
-const latitude = getRequiredElementById<HTMLInputElement>("latitude")
-const longitude = getRequiredElementById<HTMLInputElement>("longitude");
-const form = getRequiredElementById<HTMLFormElement>("checkinForm");
+//         return '';
+//     }
 
-if(!latitude || !longitude) {
-    throw new Error("#latitude or #longitude element not found.");
-}
+//     interface AddDto {
+//         Note: string;
+//         Long: number;
+//         Lat: number;
+//         DateTime: string;
+//     }
 
-if(!form) {
-    throw new Error("Form not found");
-}
+//     const latitude = getRequiredElementById<HTMLInputElement>("latitude")
+//     const longitude = getRequiredElementById<HTMLInputElement>("longitude");
 
-latitude.addEventListener("input", updateMap);
-longitude.addEventListener("input", updateMap);
+//     if (!latitude || !longitude) {
+//         throw new Error("#latitude or #longitude element not found.");
+//     }
 
-form.addEventListener("submit", async function (e) {
-    e.preventDefault();
+//     if (!form) {
+//         throw new Error("Form not found");
+//     }
 
-    const apiKey = getRequiredElementById<HTMLInputElement>("apiKey");
-    const note = getRequiredElementById<HTMLInputElement>("note");
-    const long = getRequiredElementById<HTMLInputElement>("longitude");
-    const lat = getRequiredElementById<HTMLInputElement>("latitude");
-    const dateTime = getRequiredElementById<HTMLInputElement>("datetime");
-    const timeZone = getRequiredElementById<HTMLInputElement>("timezoneInput");
+//     latitude.addEventListener("input", updateMap);
+//     longitude.addEventListener("input", updateMap);
 
-    const longNumber = Number(long.value);
-    const latNumber = Number(lat.value);
+//     form.addEventListener("submit", async function (e) {
+//         e.preventDefault();
 
-    if(isNaN(longNumber) || isNaN(latNumber)) {
-        alert('Latitude and longitude must be numbers');
-    }
-    
-    let dateTimeIso8601 = getIso8601DateString(timeZone.value, dateTime.value);
+//         const apiKey = getRequiredElementById<HTMLInputElement>("apiKey");
+//         const note = getRequiredElementById<HTMLInputElement>("note");
+//         const long = getRequiredElementById<HTMLInputElement>("longitude");
+//         const lat = getRequiredElementById<HTMLInputElement>("latitude");
+//         const dateTime = getRequiredElementById<HTMLInputElement>("datetime");
+//         const timeZone = getRequiredElementById<HTMLInputElement>("timezoneInput");
 
-    const payload: AddDto = {
-        Note: note.value,
-        Long: longNumber,
-        Lat: latNumber,
-        DateTime: dateTimeIso8601,
-    };
+//         const longNumber = Number(long.value);
+//         const latNumber = Number(lat.value);
 
-    const resultEle = getRequiredElementById<HTMLInputElement>("result");
+//         if (isNaN(longNumber) || isNaN(latNumber)) {
+//             alert('Latitude and longitude must be numbers');
+//         }
 
-    try {
-        const response = await fetch("/checkin?apiKey=" + encodeURIComponent(apiKey.value), {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify(payload),
-        });
+//         let dateTimeIso8601 = getIso8601DateString(timeZone.value, dateTime.value);
 
-        const text = await response.text();
-        resultEle.textContent = `Status: ${response.status}\n\n${text}`;
+//         const payload: AddDto = {
+//             Note: note.value,
+//             Long: longNumber,
+//             Lat: latNumber,
+//             DateTime: dateTimeIso8601,
+//         };
 
-    } catch (error) {
-        if(error instanceof Error) {
-            resultEle.textContent = error.toString();
-        } else {
-            console.error("Unknown error:", error);
-        }
-    }
-});
+//         const resultEle = getRequiredElementById<HTMLInputElement>("result");
 
-const timeZoneDataList = getRequiredElementById<HTMLDataListElement>("timezoneList");
-const timeZoneInput = getRequiredElementById<HTMLInputElement>("timezoneInput");
-const timezones = Intl.supportedValuesOf("timeZone");
+//         try {
+//             const response = await fetch("/checkin?apiKey=" + encodeURIComponent(apiKey.value), {
+//                 method: "POST",
+//                 headers: {
+//                     "Content-Type": "application/json"
+//                 },
+//                 body: JSON.stringify(payload),
+//             });
 
-let cleared = false;
+//             const text = await response.text();
+//             resultEle.textContent = `Status: ${response.status}\n\n${text}`;
 
-timeZoneInput.addEventListener("focus", () => {
-    if (!cleared) {
-        timeZoneInput.value = "";
-        cleared = true;
-    }
-});
+//         } catch (error) {
+//             if (error instanceof Error) {
+//                 resultEle.textContent = error.toString();
+//             } else {
+//                 console.error("Unknown error:", error);
+//             }
+//         }
+//     });
 
-timezones.forEach(tz => {
-    const option = document.createElement("option");
-    const offset = getTimeZoneOffset(tz);
+//     const timeZoneDataList = getRequiredElementById<HTMLDataListElement>("timezoneList");
+//     const timeZoneInput = getRequiredElementById<HTMLInputElement>("timezoneInput");
+//     const timezones = Intl.supportedValuesOf("timeZone");
 
-    option.value = tz;
-    option.label = `(${offset}) ${tz}`;
+//     let cleared = false;
 
-    timeZoneDataList.appendChild(option);
-});
+//     timeZoneInput.addEventListener("focus", () => {
+//         if (!cleared) {
+//             timeZoneInput.value = "";
+//             cleared = true;
+//         }
+//     });
 
-timeZoneInput.value = Intl.DateTimeFormat().resolvedOptions().timeZone;
+//     timezones.forEach(tz => {
+//         const option = document.createElement("option");
+//         const offset = getTimeZoneOffset(tz);
+
+//         option.value = tz;
+//         option.label = `(${offset}) ${tz}`;
+
+//         timeZoneDataList.appendChild(option);
+//     });
+
+//     timeZoneInput.value = Intl.DateTimeFormat().resolvedOptions().timeZone;
+// }
