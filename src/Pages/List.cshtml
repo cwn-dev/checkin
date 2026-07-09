@@ -1,4 +1,5 @@
 @page
+@model checkin.Pages.ListModel
 
 <div id="list">
     <table border="1" cellpadding="8" cellspacing="0">
@@ -11,12 +12,15 @@
             </tr>
         </thead>
         <tbody>
-            <tr>
-                <td>{result.Note}</td>
-                <td>{result.Lat}</td>
-                <td>{result.Long}</td>
-                <td>{result.DateTime}</td>
-            </tr>
+            @foreach (var checkin in Model.Checkins)
+            {
+                <tr>
+                    <td>@checkin.Note</td>
+                    <td>@checkin.Latitude</td>
+                    <td>@checkin.Longitude</td>
+                    <td>@checkin.DateTime</td>
+                </tr>
+            }
         </tbody>
     </table>
 </div>
