@@ -9,7 +9,7 @@ let map: any = null;
 // In other words, attach events to #content.
 
 async function initMap() {
-    fetch('/checkins')
+    fetch("/checkins")
         .then(response => response.json())
         .then(coordinates => {
             let startLat: number;
@@ -39,7 +39,7 @@ async function initMap() {
                     .map(mapElement)
                     .setView([lat, long], 3);
 
-                L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png')
+                L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png")
                     .addTo(map);
 
                 coordinates.forEach((point: {
@@ -64,7 +64,7 @@ async function initMap() {
                         initMap(startLat, startLong);
                     },
                     err => {
-                        console.warn('Geolocation failed or denied, using fallback coordinates.');
+                        console.warn("Geolocation failed or denied, using fallback coordinates.");
                         initMap(startLat, startLong);
                     }
                 );
@@ -79,8 +79,8 @@ async function initMap() {
 
 async function initAdd() {
     var greenIcon = new L.Icon({
-        iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-green.png',
-        shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
+        iconUrl: "https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-green.png",
+        shadowUrl: "https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png",
         iconSize: [25, 41],
         iconAnchor: [12, 41],
         popupAnchor: [1, -34],
@@ -180,7 +180,7 @@ async function initAdd() {
     }
 }
 
-document.body.addEventListener('htmx:beforeSwap', (evt) => {
+document.body.addEventListener("htmx:beforeSwap", (evt) => {
     clearModals();
 });
 
