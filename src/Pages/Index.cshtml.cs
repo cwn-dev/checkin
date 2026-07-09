@@ -11,4 +11,9 @@ public class IndexModel : PageModel
     {
         return Partial("_Map");
     }
+
+    public IActionResult OnGetAdd()
+    {
+        return Partial("_Add");
+    }
 }

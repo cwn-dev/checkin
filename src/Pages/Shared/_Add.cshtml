@@ -1,0 +1,24 @@
+<div class="add-sidebar opening"
+     _="on closeSidebar add .closing then remove .opening then wait for animationend then remove me">
+    <form method="post" id="checkin-form" hx-ext="json-enc" hx-post="/checkin" hx-target=".result" hx-swap="innerHTML">
+        <textarea id="note" name="note" placeholder="Note" required autofocus></textarea>
+
+        <input type="text" id="lat" name="lat" placeholder="Latitude" required>
+
+        <input type="text" id="long" name="long" placeholder="Longitude" required>
+
+        <input type="datetime-local" step="1" id="datetime" name="datetime" required>
+
+        <input id="timezoneInput" name="timezone" list="timezoneList" required />
+        <datalist id="timezoneList"></datalist>
+
+        <input type="text" id="apiKey" name="apikey" placeholder="API Key" required>
+
+        <div class="button-row">
+            <button type="submit" _"on click trigger closeSidebar">Submit</button>
+            <button type="button" _="on click trigger closeSidebar">Close</button>
+        </div>
+    </form>
+
+    <div class="result"></div>
+</div>
