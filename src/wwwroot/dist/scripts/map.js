@@ -1,0 +1,54 @@
+"use strict";
+async function initMap() {
+    fetch("/checkins")
+        .then(response => response.json())
+        .then(coordinates => {
+        let startLat;
+        let startLong;
+        if (coordinates.length > 0) {
+            // Centre on a random existing checkin.
+            const startingEntry = Math.floor(Math.random() * coordinates.length);
+            startLat = coordinates[startingEntry].lat;
+            startLong = coordinates[startingEntry].long;
+        }
+        else {
+            // Centre on London if no existing checkins.
+            startLat = 51.51213573156569;
+            startLong = -0.1823298235597972;
+        }
+        function initMap(lat, long) {
+            const mapElement = getRequiredElementById("map");
+            if (mapElement.dataset.initalised) {
+                return;
+            }
+            mapElement.dataset.initalised = "true";
+            map = L
+                .map(mapElement)
+                .setView([lat, long], 3);
+            L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png")
+                .addTo(map);
+            coordinates.forEach((point) => {
+                const marker = L
+                    .marker([point.lat, point.long])
+                    .addTo(map);
+                marker.bindPopup(`<strong>${point.dateTime}</strong><br>${point.note}`);
+            });
+        }
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(pos => {
+                startLat = pos.coords.latitude;
+                startLong = pos.coords.longitude;
+                initMap(startLat, startLong);
+            }, err => {
+                console.warn("Geolocation failed or denied, using fallback coordinates.");
+                initMap(startLat, startLong);
+            });
+        }
+        else {
+            initMap(startLat, startLong);
+        }
+    })
+        .catch(error => {
+        console.error('Error fetching data:', error);
+    });
+}
