@@ -1,7 +1,10 @@
-@page
-@model checkin.Pages.ListModel
+@using checkin.Pages.Dtos
 
-<div id="list">
+@model List<ListPageDto>
+
+<div id="list" class="list-modal opening"
+     _="on closeSidebar add .closing then remove .opening then wait for animationend then remove me">
+     <h1 class="title">Checkins</h1>
     <table border="1" cellpadding="8" cellspacing="0">
         <thead>
             <tr>
@@ -12,7 +15,7 @@
             </tr>
         </thead>
         <tbody>
-            @foreach (var checkin in Model.Checkins)
+            @foreach (var checkin in Model)
             {
                 <tr>
                     <td>@checkin.Note</td>

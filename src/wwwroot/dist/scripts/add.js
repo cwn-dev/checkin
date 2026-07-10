@@ -1,8 +1,8 @@
 "use strict";
 async function initAdd() {
     var greenIcon = new L.Icon({
-        iconUrl: "https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-green.png",
-        shadowUrl: "https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png",
+        iconUrl: "lib/leaflet/images/marker-icon-2x-green.png",
+        shadowUrl: "lib/leaflet/images/marker-shadow.png",
         iconSize: [25, 41],
         iconAnchor: [12, 41],
         popupAnchor: [1, -34],
@@ -37,6 +37,7 @@ async function initAdd() {
         timeZoneDataList.appendChild(option);
     });
     timeZoneInput.value = Intl.DateTimeFormat().resolvedOptions().timeZone;
+    // When the add form is posted, turn the date value into an ISO 8601 string.
     document.body.addEventListener("htmx:configRequest", function (evt) {
         const e = evt;
         const target = e.target;

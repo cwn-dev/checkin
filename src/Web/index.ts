@@ -28,4 +28,8 @@ function initComponents(root: HTMLElement) {
     if (root.querySelector(".add-sidebar")) {
         initAdd();
     }
+
+    if (root.querySelector("#list")) {
+        initList();
+    }
 }

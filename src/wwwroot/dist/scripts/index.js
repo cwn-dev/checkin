@@ -21,4 +21,7 @@ function initComponents(root) {
     if (root.querySelector(".add-sidebar")) {
         initAdd();
     }
+    if (root.querySelector("#list")) {
+        initList();
+    }
 }
