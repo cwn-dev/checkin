@@ -16,7 +16,6 @@ Styling ideas/boiler plate for the add popup & header also from ChatGPT, enhance
 
 - **Simple web API** to save a longitude, latitude, note and date to a database.  
 - **Map visualisation** see your saved locations plotted on a [leaflet.js](https://leafletjs.com/) map.
-- **SQLite** for lightweight, simple, file-based storage.  
 - **Dockerized** for easy deployment.  
 
 ## Using Check-in
@@ -103,7 +102,8 @@ services:
 
 ## Tech Stack
 
-- Plain HTML & CSS.
-- .NET Core 10 Minimal APIs.
-- TypeScript ES2022 (plain JS).
-- SQLite.
+- HTMX
+- .NET Razor Pages
+- .NET Core 10 Minimal APIs
+- TypeScript ES2022 (plain JS)
+- SQLite
