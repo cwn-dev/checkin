@@ -4,7 +4,11 @@
 ![Latest Release](https://img.shields.io/github/v/release/cwn-dev/checkin)
 [![Docker Hub](https://img.shields.io/badge/Docker%20Hub-Check%20in-blue?logo=docker)](https://hub.docker.com/r/cwndev/checkin)
 
-A simple self-hosted check-in app for saving where you have been or favouriting locations.
+A simple self-hosted check-in app for saving where you have been or favouriting locations.  Something I put together after wanting a way to 'check-in' to places I like, or have simply been, using my phone (or browser, in case I forget to on my phone), without relying on some third party provider.
+
+My aim is to keep the API extremely simple, and unchanging.
+
+This is just a small side project I'm working on when I feel like it. I have purposely kept things simple for now. No need to add complexity until necessary (hence the recent move to HTMX + Razor Pages!).
 
 This project is not vibe-coded (I don't use any AI tools in vscode).  I do use an LLM in the browser in the same way I would have previously used web search / StackOverflow.
 
@@ -30,7 +34,7 @@ Styling ideas/boiler plate for the add popup & header also from ChatGPT, enhance
     | ----- | ---- | ------------|
     | `lat` | `double` | Latitude in decimal degrees |
     | `long` | `double` | Longitude in decimal degrees |
-    | `dateTime` | `string` | ISO 8601 timestamp (e.g. `2025-05-11T14:30+01:00`) |
+    | `dateTime` | `string` | Can be any string * |
     | `note` | `string` | Text content of the note |
 * Example request:
     ```bash
@@ -44,7 +48,7 @@ Styling ideas/boiler plate for the add popup & header also from ChatGPT, enhance
         }'
     ```
 
-Note that 'dateTime' is a text field in SQLite, so it can be whatever you want. I personally opt for [ISO8601](https://en.wikipedia.org/wiki/ISO_8601) as I feel that has all the info I'd ever need.
+* Note that 'dateTime' is a text field in SQLite, so it can be whatever you want. I personally opt for [ISO8601](https://en.wikipedia.org/wiki/ISO_8601) as I feel that has all the info I'd ever need.
 
 ### Visualise Locations on Map
 
