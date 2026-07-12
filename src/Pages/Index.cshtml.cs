@@ -11,9 +11,7 @@ public class IndexModel : PageModel
 
     const string SqliteConnectionString = @"Data Source=/Users/craig/Development/checkin/db.db";
 
-    public void OnGet()
-    {
-    }
+    public void OnGet() {}
 
     public IActionResult OnGetMap()
     {
@@ -46,12 +44,16 @@ public class IndexModel : PageModel
                 reader.GetString(4)));
         }
         
-        var dto = results.ConvertAll(x =>
-            new ListPageDto(
-                x.Note,
-                x.Lat,
-                x.Long,
-                x.DateTime));
+        var dto = results
+            .OrderBy(x => x.DateTime)
+            .Select(x =>
+                new ListPageDto(
+                    x.Note,
+                    x.Lat,
+                    x.Long,
+                    x.DateTime))
+            .OrderByDescending(x => x.DateTime)
+            .ToList();
 
         return Partial("_List", dto);
     }
