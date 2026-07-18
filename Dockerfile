@@ -8,6 +8,7 @@ WORKDIR /app
 COPY ./src ./
 
 RUN minify -o ./wwwroot/dist/style.css ./wwwroot/dist/style.css; \
+    mkdir ./wwwroot/dist/scripts/minified; \
     minify -r -o ./wwwroot/dist/scripts/ --match="*.js" -- ./wwwroot/dist/scripts/minified/; \
     mv -f ./wwwroot/dist/scripts/minified/* ./wwwroot/dist/scripts/; \
     rm -r ./wwwroot/dist/scripts/minified
