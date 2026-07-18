@@ -1,8 +1,14 @@
 FROM mcr.microsoft.com/dotnet/sdk:10.0 AS build
 
+RUN sudo apt update; \
+    sudo apt install minify
+
 WORKDIR /app
 
 COPY ./src ./
+
+RUN minify -o ./wwwroot/dist/style.css ./out/wwwroot/dist/style.css; \
+    minify -r -o ./wwwroot/dist/scripts/ --match=*.js ./out/wwwroot/dist/scripts/
 
 RUN dotnet restore; \
     dotnet publish checkin.csproj --configuration Release --output ./out
