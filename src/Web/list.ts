@@ -12,5 +12,5 @@ function checkinElementClick(event: any) {
             [
                 event.currentTarget.dataset.latitude,
                 event.currentTarget.dataset.longitude
-            ], 3);
+            ], 6);
 }
