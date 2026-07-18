@@ -9,7 +9,7 @@ public class IndexModel : PageModel
 {
     public List<ListPageDto> Checkins { get; private set; } = [];
 
-    const string SqliteConnectionString = @"Data Source=/Users/craig/Development/checkin/db.db";
+    const string SqliteConnectionString = @"Data Source=/data/db.db";
 
     public void OnGet() {}
 
