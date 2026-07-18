@@ -1,7 +1,7 @@
 FROM mcr.microsoft.com/dotnet/sdk:10.0 AS build
 
-RUN sudo apt update; \
-    sudo apt install minify
+RUN apt update; \
+    apt install minify
 
 WORKDIR /app
 
