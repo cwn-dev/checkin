@@ -1,5 +1,4 @@
-<div class="add-sidebar opening"
-     _="on closeSidebar add .closing then remove .opening then wait for animationend then remove me">
+<div class="add-sidebar opening">
     <form method="post" id="checkin-form" hx-ext="json-enc" hx-post="/checkin" hx-target=".result" hx-swap="innerHTML">
         <textarea id="note" name="note" placeholder="Note" required autofocus></textarea>
 
@@ -15,8 +14,8 @@
         <input type="text" id="apiKey" name="apikey" placeholder="API Key" required>
 
         <div class="button-row">
-            <button type="submit" _"on click trigger closeSidebar">Submit</button>
-            <button type="button" _="on click trigger closeSidebar">Close</button>
+            <button type="submit">Submit</button>
+            <button onclick="clearModals()" type="button">Close</button>
         </div>
     </form>
 

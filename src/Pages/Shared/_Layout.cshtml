@@ -13,7 +13,7 @@
 
 <body>
     <header>
-        <div class="topbar">
+        <div class="topbar" onclick="clearModals()">
             <div class="topbar-left" hx-get="/index?handler=map" hx-target="#content" hx-push-url="/" hx-swap="innerHTML">
                 <img class="logo" src="./dist/images/logo.png" alt="logo" />
                 <div class="brand">Coordinate Map</div>
@@ -44,7 +44,6 @@
     <!-- External libraries -->
     <script src="./lib/htmx/htmx.min.js"></script>
     <script src="./lib/htmx/json-enc.js"></script>
-    <script src="./lib/hyperscript/hyperscript.min.js"></script>
     <script src="./lib/leaflet/leaflet.js"></script>
 
     <!-- App -->
