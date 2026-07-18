@@ -8,7 +8,9 @@ WORKDIR /app
 COPY ./src ./
 
 RUN minify -o ./wwwroot/dist/style.css ./wwwroot/dist/style.css; \
-    minify -r -o ./wwwroot/dist/scripts/ --match="*.js" ./wwwroot/dist/scripts/
+    minify -r -o ./wwwroot/dist/scripts/ --match="*.js" -- ./wwwroot/dist/scripts/minified/; \
+    mv -f ./wwwroot/dist/scripts/minified/* ./wwwroot/dist/scripts/; \
+    rm -r ./wwwroot/dist/scripts/minified
 
 RUN dotnet restore; \
     dotnet publish checkin.csproj --configuration Release --output ./out
