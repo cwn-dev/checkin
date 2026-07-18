@@ -352,7 +352,7 @@ body {
 /*
  * Checkins modal
  *---------------------------------------------*/
- .list-modal {
+.list-modal {
     background: rgba(17, 24, 39, 0.7);
     backdrop-filter: blur(12px);
     border: 1px solid rgba(255, 255, 255, 0.08);
@@ -360,28 +360,21 @@ body {
     box-shadow:
         0 10px 30px rgba(0, 0, 0, 0.35),
         0 0 0 1px rgba(255, 255, 255, 0.03);
-    left: 50%;
-    transform: translate(-50%);
+    left: 55px;
     max-width: calc(100vw - 32px);
     max-height: calc(100vh - 200px);
     overflow-y: auto;
     padding: 22px;
     position: fixed;
     top: 72px;
-    width: 800px;
+    width: 430px;
     z-index: 1200;
-}
-
-.list-modal .title {
-    color: white;
-    margin: 0 0 20px 0;
 }
 
 .list-modal .left {
     border-right: 1px solid #ccc;
     overflow-y: auto;
     padding: 20px;
-    width: 400px;
 }
 
 .list-modal table {
@@ -414,4 +407,96 @@ body {
 
 .list-modal tr:last-child td {
     border-bottom: none;
+}
+
+/* Modal Title */
+.list-modal .modal-title {
+    align-items: center;
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px;
+    padding-bottom: 6px;
+}
+
+.list-modal .modal-title h2 {
+    color: rgba(255,255,255,.82);
+    font-size: .95rem;
+    font-weight: 600;
+    letter-spacing: .16em;
+    margin: 0;
+    text-transform: uppercase;
+}
+
+.list-modal .modal-title span {
+    color: rgba(255,255,255,.38);
+    font-size: .75rem;
+    letter-spacing: .08em;
+}
+
+/* Blog-style entries */
+.list-modal .journal-entry {
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 16px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.18);
+    margin-bottom: 20px;
+    padding: 22px;
+    transition: 0.2s ease;
+}
+
+.list-modal .journal-entry:hover {
+    border-color: rgba(255, 255, 255, 0.16);
+    cursor: pointer;
+    transform: translateY(-2px);
+}
+
+/* Date */
+.list-modal .entry-header {
+    margin-bottom: 16px;
+}
+
+.list-modal .entry-header time {
+    color: rgba(255, 255, 255, 0.55);
+    font-size: 0.85rem;
+    letter-spacing: 0.03em;
+}
+
+/* Note text */
+.list-modal .entry-note {
+    color: #F3F4F6;
+    font-size: 1rem;
+}
+
+/* Latitude / Longitude footer */
+.list-modal .entry-meta {
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+    display: flex;
+    font-size: 0.9em;
+    gap: 40px;
+    margin-top: 20px;
+    padding-top: 16px;
+}
+
+.list-modal .entry-meta > div {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.list-modal .entry-meta label {
+    color: rgba(255, 255, 255, 0.45);
+    font-size: 0.7rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+}
+
+.list-modal .entry-meta span {
+    color: white;
+}
+
+@media (max-width: 768px) {
+    .list-modal {
+        width: calc(100vw - 154px);
+        top: 58px;
+    }
 }

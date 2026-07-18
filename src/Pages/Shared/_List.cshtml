@@ -4,26 +4,31 @@
 
 <div id="list" class="list-modal opening"
      _="on closeSidebar add .closing then remove .opening then wait for animationend then remove me">
-     <h1 class="title">Checkins</h1>
-    <table border="1" cellpadding="8" cellspacing="0">
-        <thead>
-            <tr>
-                <th>Note</th>
-                <th>Latitude</th>
-                <th>Longitude</th>
-                <th>Timestamp</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var checkin in Model)
-            {
-                <tr>
-                    <td>@checkin.Note</td>
-                    <td>@checkin.Latitude</td>
-                    <td>@checkin.Longitude</td>
-                    <td>@checkin.DateTime</td>
-                </tr>
-            }
-        </tbody>
-    </table>
+    <div class="modal-title"> <h2>Checkins</h2></div>
+
+    @foreach (var checkin in Model)
+    {
+        <article class="journal-entry" data-latitude="@checkin.Latitude" data-longitude="@checkin.Longitude">
+            <div class="entry-header">
+                <time>
+                    @checkin.DateTime
+                </time>
+            </div>
+            <div class="entry-note">
+                @checkin.Note
+            </div>
+            <div class="entry-meta">
+                <div>
+                    <label>Latitude</label>
+                    <span>@checkin.Latitude</span>
+                </div>
+                <div>
+                    <label>Longitude</label>
+                    <span>@checkin.Longitude</span>
+                </div>
+            </div>
+        </article>
+    }
 </div>
+
+
