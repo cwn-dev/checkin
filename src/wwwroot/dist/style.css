@@ -224,7 +224,6 @@ body {
 
 .add-modal input,
 .add-modal textarea,
-.add-modal button,
 .add-modal select {
     font-size: 16px;
     padding: 8px 0 8px 9px;
@@ -233,10 +232,6 @@ body {
 .add-modal textarea {
     min-height: 80px;
     resize: vertical;
-}
-
-.add-modal button {
-    cursor: pointer;
 }
 
 .add-modal #result {
@@ -269,37 +264,6 @@ body {
 .add-modal input::placeholder,
 .add-modal textarea::placeholder {
     color: rgba(255, 255, 255, 0.45);
-}
-
-.add-modal button {
-    background: linear-gradient(135deg, #2563eb, #1d4ed8);
-    border: none;
-    border-radius: 12px;
-    color: white;
-    cursor: pointer;
-    font-size: 14px;
-    font-weight: 600;
-    margin-top: 8px;
-    padding: 13px 16px;
-    transition:
-        transform 0.15s ease,
-        box-shadow 0.2s ease;
-}
-
-.add-modal button:hover {
-    box-shadow:
-        0 8px 20px rgba(37, 99, 235, 0.35);
-    transform: translateY(-1px);
-}
-
-.add-modal button:active {
-    transform: translateY(0);
-}
-
-.add-modal .button-row {
-    display: flex;
-    gap: 10px;
-    justify-content: flex-end;
 }
 
 /* Mobile */
@@ -370,30 +334,6 @@ body {
     border-bottom: none;
 }
 
-/* Modal Title */
-.list-modal .modal-title {
-    align-items: center;
-    display: flex;
-    justify-content: space-between;
-    margin-bottom: 10px;
-    padding-bottom: 6px;
-}
-
-.list-modal .modal-title h2 {
-    color: rgba(255,255,255,.82);
-    font-size: .95rem;
-    font-weight: 600;
-    letter-spacing: .16em;
-    margin: 0;
-    text-transform: uppercase;
-}
-
-.list-modal .modal-title span {
-    color: rgba(255,255,255,.38);
-    font-size: .75rem;
-    letter-spacing: .08em;
-}
-
 /* Blog-style entries */
 .list-modal .journal-entry {
     background: rgba(255, 255, 255, 0.04);
@@ -438,7 +378,7 @@ body {
     padding-top: 16px;
 }
 
-.list-modal .entry-meta > div {
+.list-modal .entry-meta>div {
     display: flex;
     flex-direction: column;
     gap: 5px;
@@ -460,4 +400,39 @@ body {
         width: calc(100vw - 154px);
         top: 58px;
     }
+}
+
+/*
+ * Generic styles
+ *---------------------------------------------*/
+/* Button */
+.button {
+    background: linear-gradient(135deg, #2563eb, #1d4ed8);
+    border: none;
+    border-radius: 12px;
+    color: white;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 600;
+    margin-top: 8px;
+    padding: 13px 16px;
+    transition:
+        transform 0.15s ease,
+        box-shadow 0.2s ease;
+}
+
+.button:hover {
+    box-shadow:
+        0 8px 20px rgba(37, 99, 235, 0.35);
+    transform: translateY(-1px);
+}
+
+.button:active {
+    transform: translateY(0);
+}
+
+.button-row {
+    display: flex;
+    gap: 10px;
+    justify-content: flex-end;
 }
