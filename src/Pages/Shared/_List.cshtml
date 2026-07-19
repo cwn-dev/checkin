@@ -2,8 +2,7 @@
 
 @model List<ListPageDto>
 
-<div id="list" class="list-modal opening"
-     _="on closeSidebar add .closing then remove .opening then wait for animationend then remove me">
+<div id="list" class="list-modal opening">
     <div class="modal-title"> <h2>Checkins</h2></div>
 
     @foreach (var checkin in Model)

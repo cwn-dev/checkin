@@ -191,7 +191,7 @@ body {
 /*
  * Add checkin sidebar
  * --------------------------------------------*/
-.add-sidebar {
+.add-modal {
     background: rgba(17, 24, 39, 0.7);
     backdrop-filter: blur(12px);
     border: 1px solid rgba(255, 255, 255, 0.08);
@@ -209,43 +209,43 @@ body {
     z-index: 1200;
 }
 
-.add-sidebar .left {
+.add-modal .left {
     border-right: 1px solid #ccc;
     overflow-y: auto;
     padding: 20px;
     width: 400px;
 }
 
-.add-sidebar form {
+.add-modal form {
     display: flex;
     flex-direction: column;
     gap: 12px;
 }
 
-.add-sidebar input,
-.add-sidebar textarea,
-.add-sidebar button,
-.add-sidebar select {
+.add-modal input,
+.add-modal textarea,
+.add-modal button,
+.add-modal select {
     font-size: 16px;
     padding: 8px 0 8px 9px;
 }
 
-.add-sidebar textarea {
+.add-modal textarea {
     min-height: 80px;
     resize: vertical;
 }
 
-.add-sidebar button {
+.add-modal button {
     cursor: pointer;
 }
 
-.add-sidebar #result {
+.add-modal #result {
     white-space: pre-wrap;
 }
 
-.add-sidebar input,
-.add-sidebar textarea,
-.add-sidebar select {
+.add-modal input,
+.add-modal textarea,
+.add-modal select {
     background: rgba(255, 255, 255, 0.06);
     border: 1px solid rgba(255, 255, 255, 0.08);
     border-radius: 12px;
@@ -257,21 +257,21 @@ body {
         box-shadow 0.2s ease;
 }
 
-.add-sidebar input:focus,
-.add-sidebar textarea:focus,
-.add-sidebar select:focus {
+.add-modal input:focus,
+.add-modal textarea:focus,
+.add-modal select:focus {
     background: rgba(255, 255, 255, 0.1);
     border-color: #60a5fa;
     box-shadow: 0 0 0 4px rgba(96, 165, 250, 0.15);
     outline: none;
 }
 
-.add-sidebar input::placeholder,
-.add-sidebar textarea::placeholder {
+.add-modal input::placeholder,
+.add-modal textarea::placeholder {
     color: rgba(255, 255, 255, 0.45);
 }
 
-.add-sidebar button {
+.add-modal button {
     background: linear-gradient(135deg, #2563eb, #1d4ed8);
     border: none;
     border-radius: 12px;
@@ -286,17 +286,17 @@ body {
         box-shadow 0.2s ease;
 }
 
-.add-sidebar button:hover {
+.add-modal button:hover {
     box-shadow:
         0 8px 20px rgba(37, 99, 235, 0.35);
     transform: translateY(-1px);
 }
 
-.add-sidebar button:active {
+.add-modal button:active {
     transform: translateY(0);
 }
 
-.add-sidebar .button-row {
+.add-modal .button-row {
     display: flex;
     gap: 10px;
     justify-content: flex-end;
@@ -304,7 +304,7 @@ body {
 
 /* Mobile */
 @media (max-width: 768px) {
-    .add-sidebar {
+    .add-modal {
         right: 46px;
         width: auto;
     }

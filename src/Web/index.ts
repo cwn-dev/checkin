@@ -25,7 +25,7 @@ function initComponents(root: HTMLElement) {
         initMap();
     }
 
-    if (root.querySelector(".add-sidebar")) {
+    if (root.querySelector("#add")) {
         initAdd();
     }
 

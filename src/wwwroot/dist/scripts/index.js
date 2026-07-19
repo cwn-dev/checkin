@@ -18,7 +18,7 @@ function initComponents(root) {
     if (root.querySelector("#map")) {
         initMap();
     }
-    if (root.querySelector(".add-sidebar")) {
+    if (root.querySelector("#add")) {
         initAdd();
     }
     if (root.querySelector("#list")) {
