@@ -58,7 +58,7 @@ async function initAdd() {
                 newMarker = L.marker(newLatLng, { icon: greenIcon }).addTo(map);
             }
             newMarker.setLatLng(newLatLng);
-            map.setView(newLatLng, 6);
+            map.setView(newLatLng, 8);
         }
     }
     async function updateImg(event) {

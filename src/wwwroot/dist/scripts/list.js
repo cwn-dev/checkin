@@ -10,5 +10,5 @@ function checkinElementClick(event) {
         .setView([
         event.currentTarget.dataset.latitude,
         event.currentTarget.dataset.longitude
-    ], 6);
+    ], 8);
 }

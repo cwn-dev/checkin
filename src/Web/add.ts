@@ -93,7 +93,7 @@ async function initAdd() {
             }
 
             newMarker.setLatLng(newLatLng);
-            map.setView(newLatLng, 6);
+            map.setView(newLatLng, 8);
         }
     }
 
