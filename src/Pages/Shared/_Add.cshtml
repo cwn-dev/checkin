@@ -2,20 +2,22 @@
     <form method="post" id="checkin-form" hx-ext="json-enc" hx-post="/checkin" hx-target=".result" hx-swap="innerHTML">
         <textarea id="note" name="note" placeholder="Note" required autofocus></textarea>
 
+        <input type="file" id="img" name="img" />
+
         <input type="text" id="lat" name="lat" placeholder="Latitude" required>
 
         <input type="text" id="long" name="long" placeholder="Longitude" required>
 
-        <input type="datetime-local" step="1" id="datetime" name="datetime" required>
+        <input type="datetime-local" step="1" id="datetime" name="datetime" placeholder="Date/time" required>
 
-        <input id="timezoneInput" name="timezone" list="timezoneList" required />
+        <input id="timezoneInput" name="timezone" list="timezoneList" placeholder="Timezone" required />
         <datalist id="timezoneList"></datalist>
 
         <input type="text" id="apiKey" name="apikey" placeholder="API Key" required>
 
         <div class="button-row">
             <button class="button" type="submit">Submit</button>
-            <button class="button" onclick="clearModals()" type="button">Close</button>
+            <button class="button" onclick="closeAdd()" type="button">Close</button>
         </div>
     </form>
 
