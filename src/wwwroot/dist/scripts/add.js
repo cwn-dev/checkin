@@ -1,21 +1,16 @@
 "use strict";
 let newMarker = null;
 async function initAdd() {
-    var greenIcon = new L.Icon({
-        iconUrl: "lib/leaflet/images/marker-icon-2x-green.png",
-        shadowUrl: "lib/leaflet/images/marker-shadow.png",
-        iconSize: [25, 41],
-        iconAnchor: [12, 41],
-        popupAnchor: [1, -34],
-        shadowSize: [41, 41]
-    });
+    const note = getRequiredElementById("note");
     const latitude = getRequiredElementById("lat");
     const longitude = getRequiredElementById("long");
     const img = getRequiredElementById("img");
     const dateTime = getRequiredElementById("datetime");
-    latitude.addEventListener("input", updateMap);
-    longitude.addEventListener("input", updateMap);
-    img.addEventListener("input", updateImg);
+    latitude.addEventListener("input", onFormInput);
+    longitude.addEventListener("input", onFormInput);
+    note.addEventListener("input", onFormInput);
+    dateTime.addEventListener("input", onFormInput);
+    img.addEventListener("input", onImageInput);
     const timeZoneDataList = getRequiredElementById("timezoneList");
     const timeZoneInput = getRequiredElementById("timezoneInput");
     const timezones = Intl.supportedValuesOf("timeZone");
@@ -45,56 +40,72 @@ async function initAdd() {
         const tz = form.querySelector("#timezoneInput").value;
         const dateTime = form.querySelector("#datetime").value;
         const iso = getIso8601DateString(tz, dateTime);
-        e.detail.parameters.datetime = iso;
+        e.Detail.Parameters.Datetime = iso;
     });
-    function updateMap() {
-        const latitudeElement = getRequiredElementById("lat");
-        const longitudeElement = getRequiredElementById("long");
-        const lat = parseFloat(latitudeElement.value);
-        const lng = parseFloat(longitudeElement.value);
-        if (!isNaN(lat) && !isNaN(lng)) {
-            const newLatLng = [lat, lng];
-            if (!newMarker) {
-                newMarker = L.marker(newLatLng, { icon: greenIcon }).addTo(map);
-            }
-            newMarker.setLatLng(newLatLng);
-            map.setView(newLatLng, 7);
-        }
+    function onFormInput(_) {
+        addMarker(latitude.value, longitude.value, dateTime.value, note.value);
     }
-    async function updateImg(event) {
+    async function onImageInput(event) {
         const e = event.target;
         const files = e.files;
         if (!files) {
             return;
         }
-        const tags = await ExifReader.load(files[0]);
-        const dateCreated = tags["DateCreated"].description;
-        const gpsLatitudeUnsigned = tags["GPSLatitude"].description;
-        const gpsLongitudeUnsigned = tags["GPSLongitude"].description;
-        const gpsLongitudeRef = tags["GPSLongitudeRef"].description;
-        const gpsLatitudeRef = tags["GPSLatitudeRef"].description;
-        // const gpsAltitude = tags['GPSAltitude'].description;
-        let gpsLatitude = gpsLatitudeUnsigned;
-        let gpsLongitude = gpsLongitudeUnsigned;
-        const dateRegex = /(\d*-\d*-\d*T\d*:\d*:\d*)(\+\d*:\d*)?/;
-        const dateItems = dateCreated.match(dateRegex);
-        if (gpsLongitudeRef === "West longitude") {
-            gpsLongitude = `-${gpsLongitude}`;
-        }
-        if (gpsLatitudeRef === "South latitude") {
-            gpsLatitude = `-${gpsLatitude}`;
-        }
-        const tzItem = document
-            .querySelector(`#timezoneList [data-offset="${dateItems[2] ?? "+00:00"}"]`).value;
-        timeZoneInput.value = tzItem;
-        latitude.value = gpsLatitude;
-        longitude.value = gpsLongitude;
-        dateTime.value = dateItems[1];
-        updateMap();
+        const imgMetaData = await extractMetadata(files);
+        addMarker(imgMetaData.Latitude, imgMetaData.Latitude, imgMetaData.DateTime);
     }
+}
+function addMarker(latitude, longitude, dateTime, note) {
+    const lat = parseFloat(latitude);
+    const lng = parseFloat(longitude);
+    if (!isNaN(lat) && !isNaN(lng)) {
+        const newLatLng = [lat, lng];
+        if (!newMarker) {
+            newMarker = L.marker(newLatLng, { icon: greenIcon }).addTo(map);
+        }
+        newMarker.setLatLng(newLatLng);
+        newMarker.bindPopup(`<strong>${dateTime}</strong><br>${note}`);
+        map.setView(newLatLng, 7);
+    }
+}
+async function extractMetadata(files) {
+    const tags = await ExifReader.load(files[0]);
+    const dateCreated = tags["DateCreated"].description;
+    const gpsLatitudeUnsigned = tags["GPSLatitude"].description;
+    const gpsLongitudeUnsigned = tags["GPSLongitude"].description;
+    const gpsLongitudeRef = tags["GPSLongitudeRef"].description;
+    const gpsLatitudeRef = tags["GPSLatitudeRef"].description;
+    // const gpsAltitude = tags['GPSAltitude'].description;
+    let gpsLatitude = gpsLatitudeUnsigned;
+    let gpsLongitude = gpsLongitudeUnsigned;
+    const dateRegex = /(\d*-\d*-\d*T\d*:\d*:\d*)(\+\d*:\d*)?/;
+    const dateItems = dateCreated.match(dateRegex);
+    if (gpsLongitudeRef === "West longitude") {
+        gpsLongitude = `-${gpsLongitude}`;
+    }
+    if (gpsLatitudeRef === "South latitude") {
+        gpsLatitude = `-${gpsLatitude}`;
+    }
+    const tzItem = document
+        .querySelector(`#timezoneList [data-offset="${dateItems[2] ?? "+00:00"}"]`).value;
+    var imgMetaData = {
+        Latitude: gpsLatitude,
+        Longitude: gpsLongitude,
+        DateTime: dateItems[1],
+        TimeZone: tzItem,
+    };
+    return imgMetaData;
 }
 function closeAdd() {
     newMarker.remove();
     newMarker = null;
     clearModals();
 }
+const greenIcon = new L.Icon({
+    iconUrl: "lib/leaflet/images/marker-icon-2x-green.png",
+    shadowUrl: "lib/leaflet/images/marker-shadow.png",
+    iconSize: [25, 41],
+    iconAnchor: [12, 41],
+    popupAnchor: [1, -34],
+    shadowSize: [41, 41]
+});

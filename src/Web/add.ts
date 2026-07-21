@@ -2,23 +2,17 @@ declare const ExifReader: any;
 let newMarker: any = null;
 
 async function initAdd() {
-    var greenIcon = new L.Icon({
-        iconUrl: "lib/leaflet/images/marker-icon-2x-green.png",
-        shadowUrl: "lib/leaflet/images/marker-shadow.png",
-        iconSize: [25, 41],
-        iconAnchor: [12, 41],
-        popupAnchor: [1, -34],
-        shadowSize: [41, 41]
-    });
-
+    const note = getRequiredElementById<HTMLInputElement>("note");
     const latitude = getRequiredElementById<HTMLInputElement>("lat")
     const longitude = getRequiredElementById<HTMLInputElement>("long");
     const img = getRequiredElementById<HTMLInputElement>("img");
     const dateTime = getRequiredElementById<HTMLInputElement>("datetime");
 
-    latitude.addEventListener("input", updateMap);
-    longitude.addEventListener("input", updateMap);
-    img.addEventListener("input", updateImg);
+    latitude.addEventListener("input", onFormInput);
+    longitude.addEventListener("input", onFormInput);
+    note.addEventListener("input", onFormInput);
+    dateTime.addEventListener("input", onFormInput);
+    img.addEventListener("input", onImageInput);
 
     const timeZoneDataList = getRequiredElementById<HTMLDataListElement>("timezoneList");
     const timeZoneInput = getRequiredElementById<HTMLInputElement>("timezoneInput");
@@ -46,16 +40,6 @@ async function initAdd() {
 
     timeZoneInput.value = Intl.DateTimeFormat().resolvedOptions().timeZone;
 
-    interface HtmxConfigRequestEvent extends Event {
-        target: HTMLElement;
-        detail: {
-            parameters: Record<string, any>;
-            xhr: XMLHttpRequest;
-            path: string;
-            triggeringEvent: Event;
-        };
-    }
-
     // When the add form is posted, turn the date value into an ISO 8601 string.
     document.body.addEventListener(
         "htmx:configRequest",
@@ -74,30 +58,20 @@ async function initAdd() {
 
             const iso = getIso8601DateString(tz, dateTime);
 
-            e.detail.parameters.datetime = iso;
+            e.Detail.Parameters.Datetime = iso;
         }
     );
 
-    function updateMap() {
-        const latitudeElement = getRequiredElementById<HTMLInputElement>("lat");
-        const longitudeElement = getRequiredElementById<HTMLInputElement>("long");
-
-        const lat = parseFloat(latitudeElement.value);
-        const lng = parseFloat(longitudeElement.value);
-
-        if (!isNaN(lat) && !isNaN(lng)) {
-            const newLatLng = [lat, lng];
-
-            if (!newMarker) {
-                newMarker = L.marker(newLatLng, { icon: greenIcon }).addTo(map);
-            }
-
-            newMarker.setLatLng(newLatLng);
-            map.setView(newLatLng, 7);
-        }
+    function onFormInput(_: Event) {
+        addMarker(
+            latitude.value,
+            longitude.value,
+            dateTime.value,
+            note.value
+        );
     }
 
-    async function updateImg(event: any) {
+    async function onImageInput(event: Event) {
         const e = event.target as HTMLInputElement;
         const files = e.files;
 
@@ -105,40 +79,72 @@ async function initAdd() {
             return;
         }
 
-        const tags = await ExifReader.load(files[0]);
-        const dateCreated = tags["DateCreated"].description;
-        const gpsLatitudeUnsigned = tags["GPSLatitude"].description;
-        const gpsLongitudeUnsigned = tags["GPSLongitude"].description;
-        const gpsLongitudeRef = tags["GPSLongitudeRef"].description;
-        const gpsLatitudeRef = tags["GPSLatitudeRef"].description;
-        // const gpsAltitude = tags['GPSAltitude'].description;
+        const imgMetaData = await extractMetadata(files);
 
-        let gpsLatitude = gpsLatitudeUnsigned;
-        let gpsLongitude = gpsLongitudeUnsigned;
-
-        const dateRegex: RegExp = /(\d*-\d*-\d*T\d*:\d*:\d*)(\+\d*:\d*)?/;
-        const dateItems = dateCreated.match(dateRegex);
-
-        if (gpsLongitudeRef === "West longitude") {
-            gpsLongitude = `-${gpsLongitude}`;
-        }
-
-        if (gpsLatitudeRef === "South latitude") {
-            gpsLatitude = `-${gpsLatitude}`;
-        }
-
-        const tzItem = (document
-            .querySelector<HTMLInputElement>(
-                `#timezoneList [data-offset="${dateItems[2] ?? "+00:00"}"]`
-            ) as HTMLInputElement).value;
-
-        timeZoneInput.value = tzItem;
-        latitude.value = gpsLatitude;
-        longitude.value = gpsLongitude;
-        dateTime.value = dateItems[1];
-
-        updateMap();
+        addMarker(
+            imgMetaData.Latitude,
+            imgMetaData.Latitude,
+            imgMetaData.DateTime
+        );
     }
+}
+
+function addMarker(latitude: string, longitude: string, dateTime: string, note?: string) {
+    const lat = parseFloat(latitude);
+    const lng = parseFloat(longitude);
+
+    if (!isNaN(lat) && !isNaN(lng)) {
+        const newLatLng = [lat, lng];
+
+        if (!newMarker) {
+            newMarker = L.marker(newLatLng, { icon: greenIcon }).addTo(map);
+        }
+
+        newMarker.setLatLng(newLatLng);
+
+        newMarker.bindPopup(
+            `<strong>${dateTime}</strong><br>${note}`);
+
+        map.setView(newLatLng, 7);
+    }
+}
+
+async function extractMetadata(files: FileList): Promise<ImageMetadata> {
+    const tags = await ExifReader.load(files[0]);
+    const dateCreated = tags["DateCreated"].description;
+    const gpsLatitudeUnsigned = tags["GPSLatitude"].description;
+    const gpsLongitudeUnsigned = tags["GPSLongitude"].description;
+    const gpsLongitudeRef = tags["GPSLongitudeRef"].description;
+    const gpsLatitudeRef = tags["GPSLatitudeRef"].description;
+    // const gpsAltitude = tags['GPSAltitude'].description;
+
+    let gpsLatitude = gpsLatitudeUnsigned as string;
+    let gpsLongitude = gpsLongitudeUnsigned as string;
+
+    const dateRegex: RegExp = /(\d*-\d*-\d*T\d*:\d*:\d*)(\+\d*:\d*)?/;
+    const dateItems = dateCreated.match(dateRegex);
+
+    if (gpsLongitudeRef === "West longitude") {
+        gpsLongitude = `-${gpsLongitude}`;
+    }
+
+    if (gpsLatitudeRef === "South latitude") {
+        gpsLatitude = `-${gpsLatitude}`;
+    }
+
+    const tzItem = (document
+        .querySelector<HTMLInputElement>(
+            `#timezoneList [data-offset="${dateItems[2] ?? "+00:00"}"]`
+        ) as HTMLInputElement).value;
+
+    var imgMetaData: ImageMetadata = {
+        Latitude: gpsLatitude,
+        Longitude: gpsLongitude,
+        DateTime: dateItems[1],
+        TimeZone: tzItem,
+    }
+
+    return imgMetaData;
 }
 
 function closeAdd() {
@@ -146,4 +152,30 @@ function closeAdd() {
     newMarker = null;
 
     clearModals();
+}
+
+const greenIcon = new L.Icon({
+    iconUrl: "lib/leaflet/images/marker-icon-2x-green.png",
+    shadowUrl: "lib/leaflet/images/marker-shadow.png",
+    iconSize: [25, 41],
+    iconAnchor: [12, 41],
+    popupAnchor: [1, -34],
+    shadowSize: [41, 41]
+});
+
+interface HtmxConfigRequestEvent extends Event {
+    readonly Target: HTMLElement;
+    readonly Detail: {
+        readonly Parameters: Record<string, any>;
+        readonly Xhr: XMLHttpRequest;
+        readonly Path: string;
+        readonly TriggeringEvent: Event;
+    };
+}
+
+interface ImageMetadata {
+    readonly Latitude: string;
+    readonly Longitude: string;
+    readonly DateTime: string;
+    readonly TimeZone: string;
 }
