@@ -40,7 +40,7 @@ async function initAdd() {
         const tz = form.querySelector("#timezoneInput").value;
         const dateTime = form.querySelector("#datetime").value;
         const iso = getIso8601DateString(tz, dateTime);
-        e.Detail.Parameters.Datetime = iso;
+        e.detail.parameters.Datetime = iso;
     });
     function onFormInput(_) {
         addMarker(latitude.value, longitude.value, dateTime.value, note.value);

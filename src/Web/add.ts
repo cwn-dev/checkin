@@ -58,7 +58,7 @@ async function initAdd() {
 
             const iso = getIso8601DateString(tz, dateTime);
 
-            e.Detail.Parameters.Datetime = iso;
+            e.detail.parameters.Datetime = iso;
         }
     );
 
@@ -169,12 +169,8 @@ const greenIcon = new L.Icon({
 });
 
 interface HtmxConfigRequestEvent extends Event {
-    readonly Target: HTMLElement;
-    readonly Detail: {
-        readonly Parameters: Record<string, any>;
-        readonly Xhr: XMLHttpRequest;
-        readonly Path: string;
-        readonly TriggeringEvent: Event;
+    readonly detail: {
+        readonly parameters: Record<string, any>;
     };
 }
 
