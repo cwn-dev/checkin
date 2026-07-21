@@ -132,7 +132,7 @@ async function extractMetadata(files: FileList): Promise<ImageMetadata> {
     let gpsLongitude = gpsLongitudeUnsigned as string;
 
     const dateRegex: RegExp = /(\d*-\d*-\d*T\d*:\d*:\d*)(\+\d*:\d*)?/;
-    const dateItems = dateCreated.match(dateRegex);
+    const dateItems: RegExpMatchArray = dateCreated.match(dateRegex);
 
     if (gpsLongitudeRef === "West longitude") {
         gpsLongitude = `-${gpsLongitude}`;
