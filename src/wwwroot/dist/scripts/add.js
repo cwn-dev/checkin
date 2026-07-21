@@ -52,7 +52,13 @@ async function initAdd() {
             return;
         }
         const imgMetaData = await extractMetadata(files);
-        addMarker(imgMetaData.Latitude, imgMetaData.Latitude, imgMetaData.DateTime);
+        const tzItem = document
+            .querySelector(`#timezoneList [data-offset="${imgMetaData.Timezone ?? "+00:00"}"]`).value;
+        latitude.value = imgMetaData.Latitude;
+        longitude.value = imgMetaData.Longitude;
+        dateTime.value = imgMetaData.DateTime;
+        timeZoneInput.value = tzItem;
+        addMarker(imgMetaData.Latitude, imgMetaData.Longitude, imgMetaData.DateTime);
     }
 }
 function addMarker(latitude, longitude, dateTime, note) {
@@ -86,13 +92,11 @@ async function extractMetadata(files) {
     if (gpsLatitudeRef === "South latitude") {
         gpsLatitude = `-${gpsLatitude}`;
     }
-    const tzItem = document
-        .querySelector(`#timezoneList [data-offset="${dateItems[2] ?? "+00:00"}"]`).value;
     var imgMetaData = {
         Latitude: gpsLatitude,
         Longitude: gpsLongitude,
         DateTime: dateItems[1],
-        TimeZone: tzItem,
+        Timezone: dateItems[2],
     };
     return imgMetaData;
 }

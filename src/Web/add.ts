@@ -81,9 +81,19 @@ async function initAdd() {
 
         const imgMetaData = await extractMetadata(files);
 
+        const tzItem = (document
+            .querySelector<HTMLInputElement>(
+                `#timezoneList [data-offset="${imgMetaData.Timezone ?? "+00:00"}"]`
+            ) as HTMLInputElement).value;
+
+        latitude.value = imgMetaData.Latitude;
+        longitude.value = imgMetaData.Longitude;
+        dateTime.value = imgMetaData.DateTime;
+        timeZoneInput.value = tzItem;
+
         addMarker(
             imgMetaData.Latitude,
-            imgMetaData.Latitude,
+            imgMetaData.Longitude,
             imgMetaData.DateTime
         );
     }
@@ -132,16 +142,11 @@ async function extractMetadata(files: FileList): Promise<ImageMetadata> {
         gpsLatitude = `-${gpsLatitude}`;
     }
 
-    const tzItem = (document
-        .querySelector<HTMLInputElement>(
-            `#timezoneList [data-offset="${dateItems[2] ?? "+00:00"}"]`
-        ) as HTMLInputElement).value;
-
     var imgMetaData: ImageMetadata = {
         Latitude: gpsLatitude,
         Longitude: gpsLongitude,
         DateTime: dateItems[1],
-        TimeZone: tzItem,
+        Timezone: dateItems[2],
     }
 
     return imgMetaData;
@@ -177,5 +182,5 @@ interface ImageMetadata {
     readonly Latitude: string;
     readonly Longitude: string;
     readonly DateTime: string;
-    readonly TimeZone: string;
+    readonly Timezone: string | undefined;
 }
