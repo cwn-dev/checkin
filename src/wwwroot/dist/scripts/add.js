@@ -58,7 +58,7 @@ async function initAdd() {
                 newMarker = L.marker(newLatLng, { icon: greenIcon }).addTo(map);
             }
             newMarker.setLatLng(newLatLng);
-            map.setView(newLatLng, 8);
+            map.setView(newLatLng, 7);
         }
     }
     async function updateImg(event) {
@@ -68,36 +68,28 @@ async function initAdd() {
             return;
         }
         const tags = await ExifReader.load(files[0]);
-        const dateCreated = tags['DateCreated'].description;
-        const gpsLatitudeUnsigned = tags['GPSLatitude'].description;
-        const gpsLongitudeUnsigned = tags['GPSLongitude'].description;
-        const gpsLongitudeRef = tags['GPSLongitudeRef'].description;
-        const gpsLatitudeRef = tags['GPSLatitudeRef'].description;
+        const dateCreated = tags["DateCreated"].description;
+        const gpsLatitudeUnsigned = tags["GPSLatitude"].description;
+        const gpsLongitudeUnsigned = tags["GPSLongitude"].description;
+        const gpsLongitudeRef = tags["GPSLongitudeRef"].description;
+        const gpsLatitudeRef = tags["GPSLatitudeRef"].description;
         // const gpsAltitude = tags['GPSAltitude'].description;
-        const offset = dateCreated.slice(-6);
         let gpsLatitude = gpsLatitudeUnsigned;
         let gpsLongitude = gpsLongitudeUnsigned;
-        // console.log(tags);
-        // console.log(dateCreated.slice(0, 19));
-        // console.log('TZ', dateCreated.slice(-6));
-        // console.log('Lat', gpsLatitude, 'Long', gpsLongitude);
-        // console.log('Altitude', gpsAltitude);
-        // TODO: Finish this off, and make gpsLongitudeRef const again
+        const dateRegex = /(\d*-\d*-\d*T\d*:\d*:\d*)(\+\d*:\d*)?/;
+        const dateItems = dateCreated.match(dateRegex);
         if (gpsLongitudeRef === "West longitude") {
             gpsLongitude = `-${gpsLongitude}`;
         }
-        if (gpsLatitudeRef === 'South latitude') {
+        if (gpsLatitudeRef === "South latitude") {
             gpsLatitude = `-${gpsLatitude}`;
         }
+        const tzItem = document
+            .querySelector(`#timezoneList [data-offset="${dateItems[2] ?? "+00:00"}"]`).value;
+        timeZoneInput.value = tzItem;
         latitude.value = gpsLatitude;
         longitude.value = gpsLongitude;
-        dateTime.value = dateCreated.slice(0, 19);
-        const tzItem = document
-            .querySelector(`#timezoneList [data-offset="${offset}"]`).value;
-        if (!tzItem) {
-            return;
-        }
-        timeZoneInput.value = tzItem;
+        dateTime.value = dateItems[1];
         updateMap();
     }
 }
