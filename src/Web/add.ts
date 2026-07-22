@@ -153,8 +153,10 @@ async function extractMetadata(files: FileList): Promise<ImageMetadata> {
 }
 
 function closeAdd() {
-    newMarker.remove();
-    newMarker = null;
+    if (newMarker) {
+        newMarker.remove();
+        newMarker = null;
+    }
 
     clearModals();
 }

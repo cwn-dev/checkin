@@ -101,8 +101,10 @@ async function extractMetadata(files) {
     return imgMetaData;
 }
 function closeAdd() {
-    newMarker.remove();
-    newMarker = null;
+    if (newMarker) {
+        newMarker.remove();
+        newMarker = null;
+    }
     clearModals();
 }
 const greenIcon = new L.Icon({
