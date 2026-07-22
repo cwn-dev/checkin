@@ -12,18 +12,19 @@ var app = builder.Build();
 
 app.UseFileServer();
 
-const string SqliteConnectionString = @"Data Source=/data/db.db";
-
 app.MapPost("/checkin", static async (
     CheckInPost checkIn,
-    IOptions<Settings> settings) =>
+    IOptions<Settings> settings,
+    IConfiguration config) =>
 {
     if (checkIn.ApiKey != settings.Value.ApiKey)
     {
         return Results.Unauthorized();
     }
 
-    using var connection = new SqliteConnection(SqliteConnectionString);
+    using var connection = new SqliteConnection(
+        config.GetConnectionString("Sqlite"));
+
     await connection.OpenAsync();
 
     string query = @"
@@ -43,9 +44,11 @@ app.MapPost("/checkin", static async (
     return Results.Ok(checkIn);
 });
 
-app.MapGet("/checkins", static async () =>
+app.MapGet("/checkins", static async (IConfiguration config) =>
 {
-    using var connection = new SqliteConnection(SqliteConnectionString);
+    using var connection = new SqliteConnection(
+        config.GetConnectionString("Sqlite"));
+
     await connection.OpenAsync();
 
     string query = "SELECT * FROM `CheckIns`";

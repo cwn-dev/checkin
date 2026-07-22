@@ -5,11 +5,9 @@ using Microsoft.Data.Sqlite;
 
 namespace checkin.Pages;
 
-public class IndexModel : PageModel
+public class IndexModel(IConfiguration config) : PageModel
 {
     public List<ListPageDto> Checkins { get; private set; } = [];
-
-    const string SqliteConnectionString = @"Data Source=/data/db.db";
 
     public void OnGet() {}
 
@@ -25,7 +23,9 @@ public class IndexModel : PageModel
 
     public async Task<IActionResult> OnGetList()
     {
-        using var connection = new SqliteConnection(SqliteConnectionString);
+        using var connection = new SqliteConnection(
+            config.GetConnectionString("Sqlite"));
+
         await connection.OpenAsync();
 
         string query = "SELECT * FROM `CheckIns`";
