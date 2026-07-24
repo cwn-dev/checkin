@@ -61,10 +61,11 @@ app.MapGet("/checkins", static async (IConfiguration config) =>
     while (await reader.ReadAsync())
     {
         results.Add(new CheckIn(
-            reader.GetDouble(2),
-            reader.GetDouble(3),
-            reader.GetString(1),
-            reader.GetString(4)));
+            Id: reader.GetInt32(0),
+            Lat: reader.GetDouble(2),
+            Long: reader.GetDouble(3),
+            Note: reader.GetString(1),
+            DateTime: reader.GetString(4)));
     }
 
     return Results.Ok(results);
@@ -78,5 +79,5 @@ class Settings
     public required string ApiKey { get; set; }
 }
 
-record CheckIn(double Lat, double Long, string? Note, string DateTime);
+record CheckIn(int Id, double Lat, double Long, string? Note, string DateTime);
 record CheckInPost(string ApiKey, double Lat, double Long, string? Note, string DateTime);

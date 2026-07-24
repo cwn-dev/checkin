@@ -5,10 +5,12 @@
 <div id="list" class="list-modal opening">
     @foreach (var checkin in Model)
     {
-        <article class="journal-entry" data-latitude="@checkin.Latitude" data-longitude="@checkin.Longitude">
+        <article class="journal-entry"
+                 data-latitude="@checkin.Latitude"
+                 data-longitude="@checkin.Longitude">
             <div class="entry-header">
                 <time>
-                    @checkin.DateTime
+                    @($"{checkin.DateTime} ({checkin.Id})")
                 </time>
             </div>
             <div class="entry-note">

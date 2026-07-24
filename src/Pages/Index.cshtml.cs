@@ -9,7 +9,7 @@ public class IndexModel(IConfiguration config) : PageModel
 {
     public List<ListPageDto> Checkins { get; private set; } = [];
 
-    public void OnGet() {}
+    public void OnGet() { }
 
     public IActionResult OnGetMap()
     {
@@ -38,16 +38,18 @@ public class IndexModel(IConfiguration config) : PageModel
         while (await reader.ReadAsync())
         {
             results.Add(new CheckIn(
-                reader.GetDouble(2),
-                reader.GetDouble(3),
-                reader.GetString(1),
-                reader.GetString(4)));
+                Id: reader.GetInt32(0),
+                Lat: reader.GetDouble(2),
+                Long: reader.GetDouble(3),
+                Note: reader.GetString(1),
+                DateTime: reader.GetString(4)));
         }
-        
+
         var dto = results
             .OrderBy(x => x.DateTime)
             .Select(x =>
                 new ListPageDto(
+                    x.Id,
                     x.Note,
                     x.Lat,
                     x.Long,
