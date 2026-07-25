@@ -66,7 +66,7 @@ async function initAdd() {
         addMarker(
             latitude.value,
             longitude.value,
-            dateTime.value,
+            getIso8601DateString(timeZoneInput.value, dateTime.value),
             note.value
         );
     }
@@ -94,7 +94,7 @@ async function initAdd() {
         addMarker(
             imgMetaData.Latitude,
             imgMetaData.Longitude,
-            imgMetaData.DateTime
+            getIso8601DateString(tzItem, imgMetaData.DateTime)
         );
     }
 }
@@ -113,7 +113,7 @@ function addMarker(latitude: string, longitude: string, dateTime: string, note?:
         newMarker.setLatLng(newLatLng);
 
         newMarker.bindPopup(
-            `<strong>${dateTime}</strong><br>${note}`);
+            `<strong>${dateTime}</strong><br>${note ?? ""}`);
 
         map.setView(newLatLng, 7);
     }

@@ -43,7 +43,7 @@ async function initAdd() {
         e.detail.parameters.Datetime = iso;
     });
     function onFormInput(_) {
-        addMarker(latitude.value, longitude.value, dateTime.value, note.value);
+        addMarker(latitude.value, longitude.value, getIso8601DateString(timeZoneInput.value, dateTime.value), note.value);
     }
     async function onImageInput(event) {
         const e = event.target;
@@ -58,7 +58,7 @@ async function initAdd() {
         longitude.value = imgMetaData.Longitude;
         dateTime.value = imgMetaData.DateTime;
         timeZoneInput.value = tzItem;
-        addMarker(imgMetaData.Latitude, imgMetaData.Longitude, imgMetaData.DateTime);
+        addMarker(imgMetaData.Latitude, imgMetaData.Longitude, getIso8601DateString(tzItem, imgMetaData.DateTime));
     }
 }
 function addMarker(latitude, longitude, dateTime, note) {
@@ -70,7 +70,7 @@ function addMarker(latitude, longitude, dateTime, note) {
             newMarker = L.marker(newLatLng, { icon: greenIcon }).addTo(map);
         }
         newMarker.setLatLng(newLatLng);
-        newMarker.bindPopup(`<strong>${dateTime}</strong><br>${note}`);
+        newMarker.bindPopup(`<strong>${dateTime}</strong><br>${note ?? ""}`);
         map.setView(newLatLng, 7);
     }
 }
