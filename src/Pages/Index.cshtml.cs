@@ -26,7 +26,6 @@ public class IndexModel(ICheckinsRepository checkinsRepo) : PageModel
         var checkins = await checkinsRepo.GetCheckins();
 
         var dto = checkins 
-            .OrderBy(x => x.DateTime)
             .Select(x =>
                 new ListPageDto(
                     x.Id,
