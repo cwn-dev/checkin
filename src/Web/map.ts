@@ -42,7 +42,8 @@ async function initMap() {
                         .marker([point.lat, point.long])
                         .addTo(map);
 
-                    marker.bindPopup(`<strong>${point.dateTime}</strong><br>${point.note}`);
+                    marker.bindPopup(
+                        `<strong>${point.dateTime}</strong><br>${point.note}`);
                 });
             }
 
@@ -54,7 +55,9 @@ async function initMap() {
                         initMap(startLat, startLong);
                     },
                     err => {
-                        console.warn("Geolocation failed or denied, using fallback coordinates.");
+                        console.warn(
+                            "Geolocation failed or denied, using fallback coordinates.");
+
                         initMap(startLat, startLong);
                     }
                 );

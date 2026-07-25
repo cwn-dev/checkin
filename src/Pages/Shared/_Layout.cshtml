@@ -4,7 +4,8 @@
 <head>
     <title>Coordinate Map</title>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
     <link rel="icon" type="image/x-icon" href="./dist/images/logo.png">
 
     <link rel="stylesheet" href="./lib/leaflet/leaflet.css" />
@@ -14,16 +15,33 @@
 <body>
     <header>
         <div class="topbar" onclick="clearModals()">
-            <div class="topbar-left" hx-get="/index?handler=map" hx-target="#content" hx-push-url="/" hx-swap="innerHTML">
+            <div class="topbar-left"
+                 hx-get="/index?handler=map"
+                 hx-target="#content"
+                 hx-push-url="/"
+                 hx-swap="innerHTML">
                 <img class="logo" src="./dist/images/logo.png" alt="logo" />
                 <div class="brand">Coordinate Map</div>
             </div>
 
             <nav>
                 <div class="nav-links">
-                    <a href="/" hx-get="/index?handler=map" hx-target="#content" hx-push-url="/" hx-swap="innerHTML">Home</a>
-                    <a href="/" hx-get="/index?handler=list" hx-target="#sidebar" hx-swap="innerHTML">List</a>
-                    <a href="/" hx-get="/index?handler=add" hx-target="#sidebar" hx-swap="innerHTML" class="add-link">+</a>
+                    <a href="/"
+                       hx-get="/index?handler=map"
+                       hx-target="#content"
+                       hx-push-url="/"
+                       hx-swap="innerHTML">Home</a>
+
+                    <a href="/"
+                       hx-get="/index?handler=list"
+                       hx-target="#sidebar"
+                       hx-swap="innerHTML">List</a>
+
+                    <a href="/"
+                       hx-get="/index?handler=add"
+                       hx-target="#sidebar"
+                       hx-swap="innerHTML"
+                       class="add-link">+</a>
 
                     <div class="menu-separator"></div>
 
