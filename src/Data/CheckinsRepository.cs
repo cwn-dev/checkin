@@ -8,7 +8,7 @@ public sealed class CheckinsRepository(IConfiguration config) : ICheckinsReposit
     public async Task<List<Checkin>> GetCheckins()
     {
         using var connection = new SqliteConnection(
-        config.GetConnectionString("Sqlite"));
+            config.GetConnectionString("Sqlite"));
 
         await connection.OpenAsync();
 
