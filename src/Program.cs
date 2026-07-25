@@ -1,4 +1,8 @@
-using Microsoft.Data.Sqlite;
+using checkin;
+using checkin.Data;
+using checkin.Data.Models;
+using checkin.Options;
+using checkin.Pages.Dtos;
 using Microsoft.Extensions.Options;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -8,76 +12,57 @@ builder.Services.Configure<Settings>(builder.Configuration.GetSection("Settings"
 
 builder.Services.AddRazorPages();
 
-var app = builder.Build();
+// App services
+builder.Services.AddCheckinApp();
 
+var app = builder.Build();
 app.UseFileServer();
 
 app.MapPost("/checkin", static async (
-    CheckInPost checkIn,
+    CheckinPostDto checkin,
     IOptions<Settings> settings,
-    IConfiguration config) =>
+    IConfiguration config,
+    ICheckinsRepository checkinsRepo) =>
 {
-    if (checkIn.ApiKey != settings.Value.ApiKey)
+    if (checkin.ApiKey != settings.Value.ApiKey)
     {
         return Results.Unauthorized();
     }
 
-    using var connection = new SqliteConnection(
-        config.GetConnectionString("Sqlite"));
+    var newCheckin = await checkinsRepo.CreateCheckin(new Checkin(
+        checkin.Lat,
+        checkin.Long,
+        checkin.Note,
+        checkin.DateTime
+    ));
 
-    await connection.OpenAsync();
+    var dto = new CheckinDto(
+        newCheckin.Id,
+        newCheckin.Lat,
+        newCheckin.Long,
+        newCheckin.Note,
+        newCheckin.DateTime
+    );
 
-    string query = @"
-        INSERT INTO CheckIns (Note, Latitude, Longitude, Timestamp)
-        VALUES ($note, $latitude, $longitude, $timestamp)
-    ";
-
-    using var cmd = new SqliteCommand(query, connection);
-
-    cmd.Parameters.AddWithValue("$note", checkIn.Note);
-    cmd.Parameters.AddWithValue("$latitude", checkIn.Lat);
-    cmd.Parameters.AddWithValue("$longitude", checkIn.Long);
-    cmd.Parameters.AddWithValue("$timestamp", checkIn.DateTime);
-
-    await cmd.ExecuteNonQueryAsync();
-
-    return Results.Ok(checkIn);
+    return Results.Ok(dto);
 });
 
-app.MapGet("/checkins", static async (IConfiguration config) =>
+app.MapGet("/checkins", static async (
+    IConfiguration config,
+    ICheckinsRepository checkinsRepo) =>
 {
-    using var connection = new SqliteConnection(
-        config.GetConnectionString("Sqlite"));
+    var results = await checkinsRepo.GetCheckins();
 
-    await connection.OpenAsync();
+    var dto = results.ConvertAll(x => new CheckinDto(
+        x.Id,
+        x.Lat,
+        x.Long,
+        x.Note,
+        x.DateTime
+    ));
 
-    string query = "SELECT * FROM `CheckIns`";
-
-    using var cmd = new SqliteCommand(query, connection);
-    using var reader = await cmd.ExecuteReaderAsync();
-
-    List<CheckIn> results = [];
-
-    while (await reader.ReadAsync())
-    {
-        results.Add(new CheckIn(
-            Id: reader.GetInt32(0),
-            Lat: reader.GetDouble(2),
-            Long: reader.GetDouble(3),
-            Note: reader.GetString(1),
-            DateTime: reader.GetString(4)));
-    }
-
-    return Results.Ok(results);
+    return Results.Ok(dto);
 });
 
 app.MapRazorPages();
 app.Run();
-
-class Settings
-{
-    public required string ApiKey { get; set; }
-}
-
-record CheckIn(int Id, double Lat, double Long, string? Note, string DateTime);
-record CheckInPost(string ApiKey, double Lat, double Long, string? Note, string DateTime);

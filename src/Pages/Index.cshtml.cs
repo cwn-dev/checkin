@@ -1,11 +1,11 @@
+using checkin.Data;
 using checkin.Pages.Dtos;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.Data.Sqlite;
 
 namespace checkin.Pages;
 
-public class IndexModel(IConfiguration config) : PageModel
+public class IndexModel(ICheckinsRepository checkinsRepo) : PageModel
 {
     public List<ListPageDto> Checkins { get; private set; } = [];
 
@@ -23,29 +23,9 @@ public class IndexModel(IConfiguration config) : PageModel
 
     public async Task<IActionResult> OnGetList()
     {
-        using var connection = new SqliteConnection(
-            config.GetConnectionString("Sqlite"));
+        var checkins = await checkinsRepo.GetCheckins();
 
-        await connection.OpenAsync();
-
-        string query = "SELECT * FROM `CheckIns`";
-
-        using var cmd = new SqliteCommand(query, connection);
-        using var reader = await cmd.ExecuteReaderAsync();
-
-        List<CheckIn> results = [];
-
-        while (await reader.ReadAsync())
-        {
-            results.Add(new CheckIn(
-                Id: reader.GetInt32(0),
-                Lat: reader.GetDouble(2),
-                Long: reader.GetDouble(3),
-                Note: reader.GetString(1),
-                DateTime: reader.GetString(4)));
-        }
-
-        var dto = results
+        var dto = checkins 
             .OrderBy(x => x.DateTime)
             .Select(x =>
                 new ListPageDto(
